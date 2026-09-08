@@ -1,16 +1,17 @@
 # Arquitectura — Óptica Costa Rica
 
-**Fase:** 0 (diseño). No hay aplicación ejecutándose todavía.  
-**Repositorio inspeccionado el 2026-09-08:** un único commit (`# sql`), sin `package.json`, sin Prisma, sin código de producto.  
+**Fase:** 1 (base técnica).  
+**Inspección inicial del repo vacío:** 2026-09-07 America/Costa_Rica (equivalente 2026-09-08 UTC).  
+**Nombre interno:** `optica-cr`.  
 **Idioma de interfaz:** español. **Zona horaria:** `America/Costa_Rica`. **Moneda principal:** CRC.
 
-Este documento propone la arquitectura de un sistema de producción para una óptica en Costa Rica. No es una maqueta: fija límites, módulos, flujos y lo que queda pendiente de aprobación.
+Este documento describe la arquitectura de un sistema de producción para una óptica en Costa Rica. Las decisiones D-01 a D-15 están en `/docs/DECISIONS.md`.
 
 ---
 
 ## 1. Principios
 
-1. **Monolito modular**, no microservicios. Un proceso Next.js, una base PostgreSQL, un bus de trabajos sobre la misma base.
+1. **Monolito modular**, no microservicios. Mismo repo, dos procesos: Next.js (HTTP) y worker pg-boss. Una PostgreSQL.
 2. **La UI no contiene reglas de negocio.** React renderiza; los módulos en `/src/modules` ejecutan casos de uso.
 3. **El POS no conoce Hacienda.** El módulo `sales` emite una venta; el módulo `electronic-invoicing` decide tipo de comprobante, construye XML, firma, envía y persiste evidencia.
 4. **Los documentos fiscales aceptados son inmutables.** Un ajuste posterior es nota de crédito o débito, nunca edición del XML firmado.
@@ -22,22 +23,21 @@ Este documento propone la arquitectura de un sistema de producción para una óp
 
 ---
 
-## 2. Stack propuesto (a pinnear en Fase 1)
+## 2. Stack (Fase 1, versiones pinneadas)
 
-Versiones exactas se fijan al iniciar Fase 1 contra el registro npm vigente. Orientación al 2026-09-08:
+Versiones exactas: `docs/PHASE-1.md` y `package.json` + lockfile.
 
-| Capa | Tecnología | Notas |
+| Capa | Tecnología | Versión |
 | --- | --- | --- |
-| Runtime | Node.js LTS vigente | Verificar LTS al iniciar Fase 1 |
-| App | Next.js 16 (estable) + React + TypeScript `strict` | App Router. No Pages Router. |
-| UI | Tailwind CSS + shadcn/ui | Español, escritorio y tablet primero |
-| Validación | Zod | En frontera HTTP y en DTOs de dominio |
-| ORM | Prisma + PostgreSQL | Migraciones versionadas; nunca destructivas automáticas |
-| Dinero | `Prisma.Decimal` + `decimal.js` | Política central en `/src/lib/money` |
-| Auth | Sesiones en servidor (ver decisión D-01) | Cookies httpOnly; Argon2id; MFA preparado, no activo |
-| Jobs | Cola PostgreSQL (pg-boss o Graphile Worker) | Recordatorios, poll de Hacienda, reintentos |
-| Tests | Vitest + Playwright + Testcontainers PostgreSQL | Ver `/docs/TESTING.md` |
-| PDF | Generación servidor (decisión D-07) | Representación gráfica ≠ comprobante fiscal |
+| Runtime | Node.js 22 LTS (`.nvmrc`) | `>=22 <23` |
+| App | Next.js App Router + React + TypeScript `strict` | 16.3.4 / 19.2.8 / 5.9.3 |
+| UI | Tailwind CSS + shadcn/ui (componentes locales) | Tailwind 4.3.3 |
+| Validación | Zod | 4.5.4 |
+| ORM | Prisma + PostgreSQL | 7.10.0 |
+| Auth | Better Auth + Prisma (D-01) | 1.7.3 |
+| Autorización | `authorize` de dominio | — |
+| Jobs | pg-boss, worker independiente (D-15) | 12.30.0 |
+| Tests | Vitest + Playwright + PostgreSQL real | 3.2.4 / 1.55.1 |
 
 **No se usará** scraping de WhatsApp Web, ni firma XAdES casera, ni `MAX(consecutivo)+1` sin bloqueo.
 
@@ -117,72 +117,26 @@ Si Hacienda cambia API o XSD, se versiona un adapter (`v4.4`, `v4.x`) sin reescr
 
 ---
 
-## 4. Estructura de carpetas propuesta
+## 4. Estructura de carpetas (materializada en Fase 1)
 
-No se crea el árbol de código en Fase 0. Esta es la estructura que se materializará desde Fase 1.
+Los módulos de clientes, óptica, inventario, ventas y Hacienda **no** se crean todavía (regla de alcance). `docs/hacienda/` no se mueve.
 
 ```
 /
-  docs/
-    ARCHITECTURE.md
-    ROADMAP.md
-    DATABASE.md
-    SECURITY.md
-    HACIENDA.md
-    TESTING.md
-    DECISIONS.md
-    hacienda/                  # referencias oficiales inmutables
-  prisma/
-    schema.prisma
-    migrations/
-  tests/
-    unit/
-    integration/
-    e2e/
-    fixtures/fiscal/
+  docs/ PHASE-1.md ARCHITECTURE.md …
+  prisma/ schema.prisma migrations/ seed.ts
+  prisma.config.ts
+  tests/ unit/ integration/ e2e/
   src/
-    app/
-      (admin)/                 # backoffice + POS autenticado
-      (portal)/                # PWA pública de citas
-      api/
-        hacienda/callback/     # POST servidor, nunca cliente
-        whatsapp/webhook/
-        health/
-    components/                # shadcn + compuestos de UI
+    app/                 # /login, /admin, api/auth
+    components/          # shadcn local + shell admin
+    lib/
     modules/
-      auth/
-      users/
-      branches/
-      customers/
-      optometry/
-      appointments/
-      products/
-      inventory/
-      suppliers/
-      purchases/
-      sales/
-      payments/
-      work-orders/
-      electronic-invoicing/
-        application/
-        domain/
-        infrastructure/
-          costa-rica-hacienda/
-            CostaRicaHaciendaAdapter.ts
-            HaciendaAuthClient.ts
-            HaciendaReceptionClient.ts
-            HaciendaKeyGenerator.ts
-            HaciendaConsecutiveGenerator.ts
-            builders/
-            signer/
-          schemas/v4.4/        # copia de trabajo de XSD oficiales
-        ui/                    # solo pantallas fiscales de admin
-      notifications/
-      reports/
-      audit/
-    lib/                       # money, clock, http, cache, logging
-    server/                    # prisma, session, jobs, storage
-    types/
+      auth/ users/ branches/ audit/ organization/
+    server/
+      db/ auth/ jobs/ logging/
+    proxy.ts             # gate cookie; authz real en servidor
+  worker/index.ts
 ```
 
 Dentro de cada módulo, cuando la complejidad lo justifique:
@@ -348,7 +302,11 @@ Toda transición escribe `AppointmentStatusHistory`.
 
 ## 10. Jobs y automatización
 
-Cola sobre PostgreSQL (sin Redis obligatorio en v1):
+pg-boss sobre PostgreSQL (D-15). Worker **independiente**; el proceso Next.js solo encola.
+
+Fase 1: únicamente `system.health-check`.
+
+Jobs futuros (no implementar ahora):
 
 | Job | Disparador |
 | --- | --- |
@@ -379,10 +337,15 @@ Cola sobre PostgreSQL (sin Redis obligatorio en v1):
 
 ---
 
-## 13. Qué no se construye en Fase 0
+## 13. Entrypoints y alcance de Fase 1
 
-- No hay `src/`, Prisma schema ejecutable, ni pantallas.
-- No hay builders XML ni firma.
-- FEC, FEE y REP quedan en el modelo como tipos **deshabilitados**.
+Dos procesos, mismo monolito:
 
-Siguiente paso: aprobación de `/docs/DECISIONS.md` y luego Fase 1.
+- `npm run dev` / `npm run start` — Next.js
+- `npm run worker` — pg-boss (`worker/index.ts`)
+
+No acoplar a Vercel/Railway/AWS/Fly. Portable por variables de entorno (D-09).
+
+**Fase 1 implementa:** auth, usuarios, RBAC, organización, sucursales, terminal POS, auditoría, worker, seed, UI admin mínima.
+
+**Aún no:** clientes, recetas, inventario, POS de ventas, citas, WhatsApp, Hacienda, XML, XAdES, PDF fiscal, CABYS.

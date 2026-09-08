@@ -1,157 +1,154 @@
-# Decisiones pendientes de aprobación
+# Decisiones de arquitectura
 
-Fase 0 se detiene aquí. No se escribe el monolito hasta que estas decisiones se cierren o se acepte el default propuesto.
+Las decisiones de Fase 0 fueron **aprobadas el 2026-09-07 (America/Costa_Rica)** con los ajustes de este documento. Lo que sigue es la fuente de verdad para implementación.
 
-Leyenda: **Propuesta** = lo que se implementará en Fase 1+ si no hay objeción. **Bloqueante** = no se puede implementar bien sin respuesta.
-
----
-
-## D-01 — Librería de autenticación (bloqueante de Fase 1)
-
-Opciones:
-
-1. **better-auth** + Prisma: sesiones, MFA futuro, cookies.
-2. **Auth.js (v5)** + session strategy database.
-3. Módulo propio mínimo: Argon2id + tabla `Session` + cookie firmada.
-
-**Propuesta:** opción 3 (módulo `auth` propio, superficie pequeña, RBAC del dominio). MFA como tabla lista y no activa.
-
-¿Se acepta, o se prefiere better-auth/Auth.js?
+Leyenda: **Cerrada** = se implementa así. **Aplazada** = no bloquea Fase 1; se retoma en la fase indicada.
 
 ---
 
-## D-02 — Firma XAdES (bloqueante de Fase 6, se diseña ya)
+## D-01 — Autenticación — CERRADA
 
-Opciones:
+**Usar Better Auth + Prisma + PostgreSQL.** No construir un sistema de autenticación propio.
 
-1. Evaluar librería Node existente en Fase 6 contra sandbox.
-2. Comprometer desde ahora un sidecar Java o .NET con librería madura, misma interfaz `ElectronicDocumentSigner`.
+Better Auth es responsable de:
 
-**Propuesta:** interfaz primero; spike de Node en Fase 6 con criterio de salida = documento **aceptado** en sandbox. Si falla, sidecar. Cero cripto artesanal.
+- autenticación email/password
+- sesiones en base de datos
+- cookies httpOnly (`Secure` en producción, SameSite apropiado)
+- credenciales (hashing; ver `docs/SECURITY.md`)
+- infraestructura para MFA futura (plugin 2FA **no habilitado** en Fase 1)
 
-¿Hay preferencia de runtime para el sidecar (Java 21 / .NET 8)?
+El dominio de la aplicación es responsable de:
 
----
+- `User` (campos de negocio: `active`, `organizationId`, `defaultBranchId`)
+- `Role`, `Permission`, `UserRole`, `RolePermission`
+- permisos por sucursal
+- políticas RBAC (`authorize`)
 
-## D-03 — Datos fiscales del emisor (bloqueante de Fase 5)
+Nunca autorizar solo en frontend. Todo permiso se comprueba en servidor (Server Actions, Route Handlers, servicios).
 
-Necesarios para XML y clave:
-
-- Tipo y número de identificación de la óptica
-- Razón social, nombre comercial, ubicación, teléfonos, correos
-- Código de actividad económica
-- Si el software se registrará como proveedor de sistemas o se usará la cédula propia (Anexo 1, `ProveedorSistemas`)
-- Código establecimiento 001 y terminales
-- Consecutivos actuales si ya emiten con otro sistema (el Anexo exige **continuar** la numeración al cambiar de plataforma)
-
-Sin estos datos se puede construir el motor con fixtures, no un emisor real.
+Registro público **deshabilitado** (`emailAndPassword.disableSignUp: true`). Los usuarios los crea un administrador. El primer `SUPER_ADMIN` sale del seed de desarrollo.
 
 ---
 
-## D-04 — Política FE vs TE en el POS (bloqueante de Fase 4–5)
+## D-02 — Firma XAdES — CERRADA (implementación en Fase 6)
 
-Hay que transcribir el Decreto 44739-H y la resolución vigente, no inventar.
+Mantener la interfaz `ElectronicDocumentSigner`. **No implementar firma en Fase 1.**
 
-Preguntas de producto, una vez leída la norma:
+En Fase 6:
 
-- ¿El cajero elige FE/TE o el sistema lo infiere si el cliente tiene identificación de contribuyente?
-- ¿Existe “cliente genérico” y en qué casos legales se emite tiquete?
-- ¿Se exige FE siempre que el cliente pida crédito fiscal?
+1. Evaluar una solución Node madura.
+2. Probar contra sandbox real de Hacienda.
+3. Criterio de aceptación = comprobante **aceptado** por Hacienda (no un HTTP 201).
+4. Si no cumple, sidecar Java/.NET detrás de la misma interfaz.
 
-**Propuesta temporal de producto (no es norma):** el POS ofrece ambos; el servidor valida la combinación contra la política implementada desde la norma en Fase 5. Hasta entonces no se envía nada a Hacienda.
-
----
-
-## D-05 — Crédito, apartados y Recibo Electrónico de Pago
-
-REP (tipo 10) existe en 4.4 y queda **apagado** en v1.
-
-¿Los apartados y ventas a crédito de la óptica deben:
-
-1. Emitir FE/TE al cierre de la venta y tratar abonos solo en cartera interna hasta que REP esté implementado, o
-2. Bloquear crédito/apartado en POS hasta tener REP sandbox, o
-3. Priorizar REP justo después de FE/TE/NC/ND (Fase 6b)?
-
-**Propuesta:** opción 1 para no frenar el POS, con advertencia contable explícita en UI y en este documento. Confirmar con el contador de la óptica.
+Prohibido implementar criptografía propia.
 
 ---
 
-## D-06 — Consecutivos al agotar 10 dígitos
+## D-03 — Datos reales del emisor — CERRADA (aplazada a fases fiscales)
 
-El Anexo permite reiniciar en 1. **Propuesta:** no reiniciar automático; alerta a `SUPER_ADMIN` al 90% y bloqueo controlado. ¿De acuerdo?
+No son necesarios todavía. Fase 1 usa **seed de desarrollo**:
 
----
+- Organization: «Óptica Demo»
+- Branch: «Sucursal Central»
+- PosTerminal: «Caja 1»
 
-## D-07 — Motor de PDF
-
-Opciones: `@react-pdf/renderer`, Puppeteer, o servicio de impresión.
-
-**Propuesta:** `@react-pdf/renderer` en servidor (sin Chrome). Si el QR o el layout oficial no se logran, se evalúa Chromium en Fase 7.
+No solicitar credenciales Hacienda, certificado P12/PFX, contraseña Hacienda ni consecutivos reales hasta las fases fiscales (5–6). No añadir campos fiscales v4.4 arbitrarios a `Organization` en Fase 1.
 
 ---
 
-## D-08 — Cifrado de expediente óptico
+## D-04 — FE vs TE — CERRADA (implementación en Fase 5)
 
-**Propuesta Fase 2:** recetas en PostgreSQL + archivos en storage con ACL. Cifrado de columna de identificaciones en Fase 12 si se exige. ¿Hay requisito de cifrado de campo ya?
-
----
-
-## D-09 — Hosting y backups
-
-¿Dónde correrá (VPS Costa Rica, Fly, Railway, on-prem)? ¿PostgreSQL gestionado? Define PITR y residencia de datos (Ley 8968).
-
-**Propuesta de diseño:** un servidor + Postgres; object storage S3-compatible para XML/PDF. Ajustable.
+No implementar reglas fiscales definitivas ahora. La política se documentará e implementará desde la normativa oficial vigente en Fase 5. **No enviar ningún documento a Hacienda en Fase 1.**
 
 ---
 
-## D-10 — WhatsApp
+## D-05 — REP — CERRADA
 
-¿Ya existe cuenta WhatsApp Business Platform (Cloud API) y plantillas aprobadas por Meta? Sin eso, Fase 9 queda en email + cola.
+REP permanece deshabilitado. No condiciona Fase 1.
 
-**Propuesta:** interfaz `MessagingProvider` en Fase 9; WhatsApp se conecta cuando haya credenciales.
-
----
-
-## D-11 — Marca y nombre del producto
-
-El repo se llama `sql`. ¿Nombre comercial del sistema y de la óptica para UI, PDF y `ProveedorSistemas`?
-
-**Propuesta de código interno:** `optica-cr` hasta tener marca.
+El tratamiento comercial de crédito/apartados vs emisión de REP se retoma cuando exista POS (Fase 4) y el motor fiscal (Fase 5–6). No se inventa comportamiento fiscal mientras tanto.
 
 ---
 
-## D-12 — Alcance de la primera sucursal
+## D-06 — Consecutivos al agotar 10 dígitos — CERRADA (no implementar aún)
 
-¿Inventario y caja únicos, o hay que nacer con N sucursales reales (códigos 001, 002…)? El modelo soporta N. El seed de Fase 1 puede ser una sucursal.
-
----
-
-## D-13 — Confirmación de Anexos 22/04/2026
-
-`www.hacienda.go.cr/docs/ANEXOS_Y_ESTRUCTURAS_V4.4.pdf` no se pudo descargar (HTTP 400). ATV sí. En Fase 5 se comparará. Si el PDF de hacienda.go.cr es más nuevo, **ese** pasa a ser la copia canónica.
-
-¿Hay un archivo interno más reciente que deba usarse como fuente?
+Aprobado: alerta preventiva y bloqueo controlado. No reinicio silencioso. Implementación en Fase 5 junto al generador de consecutivos.
 
 ---
 
-## D-14 — Ambiente sandbox de Hacienda
+## D-07 — PDF — CERRADA (no implementar aún)
 
-¿La óptica ya tiene usuario/contraseña y llave criptográfica de **pruebas** en ATV? Fase 6 no puede cerrarse sin eso. Las URLs de token sandbox deben copiarse de la guía oficial, no de foros.
-
----
-
-## D-15 — Cola de trabajos
-
-**Propuesta:** pg-boss (misma PostgreSQL). Alternativa: Graphile Worker. ¿Objeción a no introducir Redis en v1?
+Aprobado inicialmente: `@react-pdf/renderer` en servidor. Fase 7.
 
 ---
 
-## Defaults que se consideran aprobados si no se objeta
+## D-08 — Protección de datos — CERRADA (parcial)
 
-- Monolito Next.js 16 + Prisma + PostgreSQL + Zod + shadcn.
+No implementar expediente clínico en Fase 1.
+
+La arquitectura debe permitir cifrado de campos sensibles y almacenamiento protegido después. No diseñar dependencias que obliguen a guardar secretos o documentos sensibles como texto público. Adjuntos futuros van a storage con ACL, no a columnas de texto libre en la UI.
+
+---
+
+## D-09 — Hosting — APLAZADA
+
+Pendiente el proveedor. Por lo tanto:
+
+- **No** acoplar la aplicación a Vercel, Railway, AWS, Fly.io u otro PaaS.
+- Portable mediante variables de entorno.
+- Dos entrypoints del mismo repo: app Next.js y worker Node de pg-boss.
+
+---
+
+## D-10 — WhatsApp — CERRADA (no implementar aún)
+
+Aprobado el puerto `MessagingProvider`. WhatsApp Cloud API en Fase 9. No scraping.
+
+---
+
+## D-11 — Nombre interno — CERRADA
+
+Nombre interno temporal: **`optica-cr`**. No usar `sql` como nombre de aplicación en código, `package.json`, UI ni logs.
+
+---
+
+## D-12 — Multi-sucursal — CERRADA
+
+Modelo multi-sucursal desde el esquema. Seed inicial: 1 organización, 1 sucursal, 1 terminal POS.
+
+---
+
+## D-13 / D-14 — Anexos y sandbox Hacienda — APLAZADAS
+
+Se resuelven antes de la implementación fiscal real (Fases 5–6). No bloquean Fase 1.
+
+---
+
+## D-15 — Job queue — CERRADA
+
+**pg-boss sobre PostgreSQL.** Sin Redis.
+
+El procesamiento de jobs **no** depende del lifecycle del proceso web de Next.js.
+
+Dos entrypoints desplegables desde el mismo repositorio:
+
+1. aplicación Next.js (puede **encolar**)
+2. worker Node (`worker/index.ts`) que **procesa**
+
+Ambos pertenecen al mismo monolito modular y comparten dominio, servicios y PostgreSQL. No iniciar workers dentro de cada request de Next.js.
+
+Job inicial de Fase 1: `system.health-check` únicamente.
+
+---
+
+## Defaults vigentes
+
+- Monolito Next.js + Prisma + PostgreSQL + Zod + shadcn/ui.
 - Español, `America/Costa_Rica`, CRC.
-- `HACIENDA_ENVIRONMENT=sandbox` por defecto.
-- FEC/FEE/REP deshabilitados.
+- `HACIENDA_ENVIRONMENT=sandbox` por defecto cuando exista config fiscal.
+- FEC / FEE / REP deshabilitados.
+- IDs: UUIDv7 en todas las PK de dominio (política única; ver `docs/DATABASE.md`).
 - No microservicios.
-- No WhatsApp Web scraping.
 - No migraciones destructivas automáticas.

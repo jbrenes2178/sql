@@ -1,35 +1,83 @@
-# Sistema de óptica — Costa Rica
+# Óptica CR
 
-Plataforma de producción para administrar una óptica en Costa Rica: expediente visual, inventario, POS, laboratorio, citas y **facturación electrónica v4.4** del Ministerio de Hacienda.
+Sistema de producción para una óptica en Costa Rica. Nombre interno: **`optica-cr`**.
 
-Este repositorio está en **Fase 0 (arquitectura)**. No hay aplicación ejecutable todavía.
+- Idioma: español
+- Zona horaria: `America/Costa_Rica`
+- Moneda: CRC
+- Fase actual: **1 — base técnica** (auth, RBAC, org/sucursal, auditoría, worker)
 
-## Documentación
+No hay POS, clientes, inventario ni Hacienda en esta fase.
 
-| Documento | Contenido |
-| --- | --- |
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Arquitectura, carpetas, flujos de venta / Hacienda / citas |
-| [docs/ROADMAP.md](docs/ROADMAP.md) | Fases 0–12 y orden de construcción |
-| [docs/DATABASE.md](docs/DATABASE.md) | Modelo entidad-relación e invariantes |
-| [docs/SECURITY.md](docs/SECURITY.md) | RBAC, sesiones, secretos, Hacienda |
-| [docs/HACIENDA.md](docs/HACIENDA.md) | Integración fiscal 4.4 (solo fuentes oficiales) |
-| [docs/TESTING.md](docs/TESTING.md) | Estrategia de pruebas |
-| [docs/DECISIONS.md](docs/DECISIONS.md) | Decisiones que requieren aprobación |
-| [docs/hacienda/](docs/hacienda/) | PDF, XSD y HTML oficiales capturados el 2026-09-08 |
+## Requisitos
 
-## Principios fiscales
+- Node.js **22** (ver `.nvmrc`). No usar 23+ ni 20.
+- PostgreSQL **16+**
+- npm 10+
 
-- Comprobantes Electrónicos **versión 4.4**.
-- XML validado contra XSD oficiales **antes** de firmar y enviar.
-- Un HTTP 201 de recepción **no** es aceptación.
-- Documentos aceptados son inmutables; ajustes vía nota de crédito o débito.
-- Sandbox por defecto. Producción nunca es el default.
-
-## Arranque (a partir de Fase 1)
+## Arranque local
 
 ```bash
 cp .env.example .env
-# completar secretos fuera de git
+# Edite SEED_ADMIN_PASSWORD (mínimo 12) y BETTER_AUTH_SECRET (≥ 32 caracteres)
+
+# PostgreSQL de ejemplo:
+#   sudo -u postgres createuser optica
+#   sudo -u postgres createdb -O optica optica
+#   sudo -u postgres createdb -O optica optica_test
+
+npm ci
+npx prisma generate
+npx prisma migrate deploy
+npm run db:seed
+npm run dev
 ```
 
-No incluir certificados `.p12` ni contraseñas de Hacienda en el repositorio.
+En otra terminal:
+
+```bash
+npm run worker
+```
+
+Abrir http://localhost:3000 — redirige a `/login`.
+
+## Scripts
+
+| Script | Qué hace |
+| --- | --- |
+| `npm run dev` | Next.js en desarrollo |
+| `npm run build` / `start` | Producción HTTP |
+| `npm run worker` | Worker pg-boss (proceso aparte) |
+| `npm run lint` | ESLint |
+| `npm run typecheck` | `tsc --noEmit` |
+| `npm test` | Vitest unitario |
+| `npm run test:integration` | Vitest + PostgreSQL real (`TEST_DATABASE_URL`) |
+| `npm run test:e2e` | Playwright login → admin → logout |
+| `npm run db:migrate` | `prisma migrate dev` |
+| `npm run db:seed` | Seed de **desarrollo** |
+
+## Primer administrador
+
+El `SUPER_ADMIN` no se registra por UI. Sale del seed:
+
+```
+SEED_ADMIN_EMAIL=
+SEED_ADMIN_PASSWORD=
+```
+
+El seed se niega en `APP_ENV=production` salvo `ALLOW_PRODUCTION_SEED=I_UNDERSTAND_THIS_IS_DESTRUCTIVE`.
+
+## Documentación
+
+- `docs/PHASE-1.md` — alcance y cierre de esta fase
+- `docs/ARCHITECTURE.md`
+- `docs/DATABASE.md`
+- `docs/SECURITY.md`
+- `docs/TESTING.md`
+- `docs/DECISIONS.md`
+- `docs/ROADMAP.md`
+- `docs/HACIENDA.md` — no aplica a Fase 1
+
+## Hosting
+
+Portable por variables de entorno (D-09). No hay acoplamiento a Vercel, Railway, AWS ni Fly.io. Dos procesos del mismo repo: app Next.js y `worker/index.ts`.

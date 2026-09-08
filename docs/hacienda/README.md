@@ -10,7 +10,7 @@ Este directorio conserva **copias locales inmutables** de la documentación y es
 | --- | --- |
 | Especificación | Comprobantes Electrónicos **versión 4.4** |
 | Fuente de esquemas XSD | Portal ATV, `docs/esquemas/2024/v4.4/` |
-| Fecha de captura de esta copia | 2026-09-08 |
+| Fecha de captura de esta copia | 2026-09-07 America/Costa_Rica (2026-09-08 UTC) |
 | Estado de implementación en código | **No implementado.** Fase 0 solo conserva referencias. |
 
 ## Contenido

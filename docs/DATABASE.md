@@ -5,7 +5,7 @@ PostgreSQL. Prisma. Migraciones versionadas. **Ninguna migración destructiva au
 Zona horaria de aplicación: `America/Costa_Rica`. En base, timestamps `timestamptz`.  
 Dinero: `NUMERIC(18,5)` para campos fiscales (alineado a `DecimalDineroType` del XSD v4.4: `totalDigits=18`, `fractionDigits=5`, `minInclusive=0`). Precios de lista pueden usar la misma precisión. La UI muestra 2 decimales en CRC; el cálculo fiscal no usa `number`.
 
-IDs: `UUID` (UUIDv7). Identificadores fiscales (`clave`, `consecutivo`) son columnas aparte, nunca PK de negocio.
+IDs: **UUIDv7** en todas las claves primarias de dominio (`String @id @db.Uuid`, generado en aplicación / Prisma). No se mezclan CUID ni seriales. Identificadores fiscales (`clave`, `consecutivo`) son columnas aparte, nunca PK de negocio.
 
 ---
 
@@ -72,24 +72,39 @@ erDiagram
 
 ## 2. Núcleo organizacional y RBAC
 
-### Organization
+### Organization (Fase 1)
 
-Una óptica (no multi-tenant SaaS en v1). Datos del **emisor fiscal**: razón social, nombre comercial, tipo y número de identificación, actividad económica CABYS/Hacienda del emisor, correos, teléfonos, ubicación (provincia/cantón/distrito según catálogo oficial cuando se implemente), `proveedorSistemasId` (cédula del proveedor de sistemas o la propia si es desarrollo a la medida, según Anexo 1).
+Emisor/empresa. Campos actuales (sin fiscales v4.4): `id`, `legalName`, `tradeName`, `timezone`, `defaultCurrency`, `active`, timestamps.
 
-### Branch
+### Branch (Fase 1)
 
-Sucursal. Código de establecimiento Hacienda de **3 dígitos** (001 casa matriz, 002+ sucursales) — Anexo 1 Nota 3. Dirección, teléfono, activa. Zona horaria heredada.
+`id`, `organizationId`, `name`, `code`, `timezone`, `active`. Unique `(organizationId, code)`. El `code` podrá representar el código de establecimiento Hacienda más adelante; **no** se aplican reglas fiscales no verificadas en Fase 1.
 
-### PosTerminal
+### PosTerminal (Fase 1)
 
-Punto de venta. Código de terminal Hacienda de **5 dígitos** (`00001` si hay una sola o servidor centralizado) — Nota 3. Pertenece a una sucursal.
+`id`, `branchId`, `name`, `code`, `active`. Unique `(branchId, code)`. Sin generación de consecutivos fiscales.
 
-### User / Session / Role / Permission / UserRole / RolePermission
+### User / Session / Account / Verification (Better Auth + dominio)
 
-- Usuario: nombre, email, hash Argon2id, sucursal por defecto, activo, `mfaEnabled` (false en v1).
-- `Session`: token opaco o identificador de sesión, `expiresAt`, `ip` si es legal y se habilita, `userAgent`, revocable.
-- Roles iniciales: `SUPER_ADMIN`, `ADMIN`, `MANAGER`, `OPTOMETRIST`, `SALES`, `CASHIER`, `INVENTORY`.
-- Permisos granulares (`sale.create`, `sale.discount.authorize`, `inventory.allow_negative`, `hacienda.config.update`, etc.). Un usuario puede tener varios roles.
+Better Auth posee las tablas `user`, `session`, `account`, `verification` (esquema oficial de Better Auth). El dominio **extiende** `user` con:
+
+- `active` — usuarios inactivos no inician sesión
+- `organizationId` — scope; no se toma del cliente HTTP
+- `defaultBranchId` opcional
+
+El hash de contraseña vive en `account.password` (proveedor `credential`), nunca en texto plano. Better Auth revoca sesiones al logout.
+
+### Role / Permission / UserRole / RolePermission
+
+RBAC de dominio, independiente de Better Auth. Roles iniciales: `SUPER_ADMIN`, `ADMIN`, `MANAGER`, `OPTOMETRIST`, `SALES`, `CASHIER`, `INVENTORY`. Permisos granulares (`users.read`, `branches.update`, `audit.read`, …). Un usuario puede tener varios roles. `SUPER_ADMIN` tiene bypass explícito y testeado.
+
+### AuditLog (Fase 1)
+
+Append-only a nivel de servicio: `LOGIN_SUCCESS`, `LOGIN_FAILURE`, `LOGOUT`, `USER_*`, `ROLE_*`, `BRANCH_*`. Sin secretos. `branchId` nullable. `actorUserId` nullable (p. ej. login fallido).
+
+pg-boss crea sus propias tablas; no se modelan en Prisma.
+
+Migración inicial de Fase 1: `prisma/migrations/0001_fase1_base/`.
 
 ---
 

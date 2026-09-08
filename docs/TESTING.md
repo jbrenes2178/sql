@@ -8,12 +8,9 @@ Ningún módulo se declara terminado sin pruebas. Un test que falla se corrige o
 
 | Nivel | Herramienta | Qué cubre |
 | --- | --- | --- |
-| Unitarias | Vitest | Dinero, clave, consecutivo, políticas RBAC, parsers Zod, DocumentTypePolicy |
-| Integración | Vitest + Testcontainers PostgreSQL | Transacciones de venta, stock, `SELECT FOR UPDATE` de consecutivos, idempotencia |
-| Contrato XSD | Vitest + validador XML | Fixtures vs XSD oficiales v4.4 |
-| HTTP Hacienda | Tests de contrato con fixtures del HTML oficial | POST 201, GET `ind-estado`, callback duplicado, 400/401/429 |
-| E2E | Playwright | Login, POS feliz, reserva PWA, permisos denegados |
-| Sandbox real | Suite opt-in `HACIENDA_SANDBOX_E2E=1` | Firma + aceptación real. No corre en CI sin secretos |
+| Unitarias | Vitest | RBAC, SUPER_ADMIN, scope org/sucursal, Zod; más adelante dinero/clave/XML |
+| Integración | Vitest + PostgreSQL real | Usuario, roles, sesión, disable, auditoría. Docker/Testcontainers opcional; CI puede usar servicio Postgres |
+| E2E Fase 1 | Playwright | login → admin → logout |
 
 ---
 
@@ -94,15 +91,18 @@ No se versionan certificados reales. Certificados de test locales, nunca de prod
 
 ## 9. E2E de UI
 
-Playwright contra app local + Postgres de test:
+Fase 1 (Playwright): **login → /admin → logout**. Credenciales del seed (`SEED_ADMIN_*`). No forma parte del job CI mínimo (sí lint/typecheck/unit/build; integración usa Postgres de servicio).
 
-1. Login admin.
-2. Alta de cliente y receta (Fase 2+).
-3. Producto con CABYS de fixture (mock de API pública).
-4. Venta POS y movimiento de inventario.
-5. Portal: reservar cita con token (Fase 8).
+Fases posteriores:
+
+1. Alta de cliente y receta (Fase 2+).
+2. Producto con CABYS de fixture (mock de API pública).
+3. Venta POS y movimiento de inventario.
+4. Portal: reservar cita con token (Fase 8).
 
 Fiscal sandbox no se mezcla con el E2E de CI por defecto.
+
+Docker es opcional. Las pruebas de integración usan PostgreSQL real (`TEST_DATABASE_URL`), no SQLite.
 
 ---
 

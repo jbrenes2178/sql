@@ -17,30 +17,31 @@ No se estiman calendarios. El orden es técnico y de dependencia.
 
 ---
 
-## Fase 0 — Arquitectura (esta entrega)
+## Fase 0 — Arquitectura
 
 **Objetivo:** inspeccionar el repo, fijar arquitectura, modelo, seguridad, estrategia Hacienda y pendientes.
 
-**Entregables:** `/docs/*`, copias oficiales en `/docs/hacienda/`, `.env.example`.
+**Entregables:** `/docs/*`, copias oficiales en `/docs/hacienda/`.
 
-**No incluye:** código de módulos, migraciones aplicadas, UI.
-
-**Salida:** aprobación humana de `/docs/DECISIONS.md`.
+**Salida:** `/docs/DECISIONS.md` aprobado el 2026-09-07 America/Costa_Rica, con ajustes.
 
 ---
 
 ## Fase 1 — Base técnica, PostgreSQL, Prisma, autenticación y usuarios
 
+**Estado:** implementada. Detalle en `docs/PHASE-1.md`. **No iniciar Fase 2.**
+
 **Construye:**
 
 - Next.js + TypeScript + Tailwind + shadcn/ui + Prisma.
-- PostgreSQL, `Organization`, `Branch`, `User`, `Role`, `Permission`, `UserRole`, `Session`.
-- Login con sesión httpOnly, Argon2id, RBAC en servidor.
+- PostgreSQL, `Organization`, `Branch`, `PosTerminal`, `User`, `Role`, `Permission`, `UserRole`.
+- Better Auth (sesiones DB, cookies, `disableSignUp`); RBAC de dominio en servidor.
+- Worker pg-boss independiente (`worker/index.ts`).
 - Layout admin con sidebar filtrado por permisos (la UI no es la fuente de verdad).
 - Reloj `America/Costa_Rica`, moneda CRC, logging estructurado.
-- Seed de roles: `SUPER_ADMIN`, `ADMIN`, `MANAGER`, `OPTOMETRIST`, `SALES`, `CASHIER`, `INVENTORY`.
+- Seed de desarrollo: 1 org, 1 sucursal, 1 terminal, roles y `SUPER_ADMIN` vía env.
 
-**Pruebas:** unitarias de hashing/sesión; integración de login y autorización denegada.
+**Pruebas:** unitarias de RBAC/scope/Zod; integración PostgreSQL; Playwright login/logout.
 
 **Bloquea Fase 2 si:** no hay sesión persistente segura ni RBAC servidor.
 

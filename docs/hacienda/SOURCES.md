@@ -1,4 +1,4 @@
-# Fuentes oficiales capturadas — 2026-09-08
+# Fuentes oficiales capturadas — 2026-09-07 America/Costa_Rica (2026-09-08 UTC)
 
 Este archivo registra **exactamente** qué se descargó, desde dónde, y qué no se pudo verificar. No completa huecos con memoria ni con blogs de terceros.
 
@@ -43,7 +43,7 @@ El Anexo 1, Nota 2, publica estos namespaces (no se modifican):
 - `https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronicaExportacion`
 - `https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/reciboElectronicoPago`
 
-Al consultar esas URLs el 2026-09-08 el CDN respondió **HTTP 403**. Por eso la copia de trabajo se tomó de ATV, que sí entregó los XSD. En Fase 5 se reintentará el CDN y se comparará integridad.
+Al consultar esas URLs el 2026-09-07 America/Costa_Rica (2026-09-08 UTC) el CDN respondió **HTTP 403**. Por eso la copia de trabajo se tomó de ATV, que sí entregó los XSD. En Fase 5 se reintentará el CDN y se comparará integridad.
 
 ## 4. Documentos oficiales que este entorno no pudo descargar
 
@@ -65,7 +65,7 @@ Estas normas rigen el diseño; no se copió el texto completo porque no se obtuv
 
 En Fase 5/6 se deben archivar copias locales de esas normas si el acceso lo permite.
 
-## 6. APIs públicas verificadas en vivo (2026-09-08)
+## 6. APIs públicas verificadas en vivo (2026-09-07 America/Costa_Rica / 2026-09-08 UTC)
 
 Consultas de humo contra https://api.hacienda.go.cr (documentación oficial `/docs/`):
 

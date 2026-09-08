@@ -20,12 +20,13 @@ Alcance: óptica en Costa Rica, datos de clientes y **datos de salud visual**, c
 
 ## 2. Autenticación y sesión
 
-- Sesión de servidor. Cookie `HttpOnly`, `Secure` (en HTTPS), `SameSite=Lax` o `Strict` según el flujo.
-- `AUTH_SECRET` de alta entropía. Rotación documentada en Fase 12.
-- Contraseñas: **Argon2id**. Nunca bcrypt como destino final si Argon2 está disponible; no SHA ni MD5.
-- Expiración de sesión y reauth para descuentos altos, anulación y cambios de config Hacienda.
-- MFA: el modelo tiene `mfaEnabled` / factores; **no se activa en Fase 1** (decisión D-01). La arquitectura no debe impedir TOTP después.
-- Logout invalida la fila `Session`.
+- Sesión de servidor vía **Better Auth** (D-01). Cookie `HttpOnly`, `Secure` en producción, `SameSite=Lax`.
+- Secretos: `BETTER_AUTH_SECRET` / `AUTH_SECRET` de alta entropía. Rotación documentada en Fase 12.
+- Contraseñas: Better Auth con hasher **Argon2id** (`emailAndPassword.password.hash/verify`). No SHA ni MD5. El hash no se loguea.
+- Registro público deshabilitado.
+- MFA: Better Auth permite el plugin 2FA; **no se activa en Fase 1**.
+- Logout invalida la sesión en base de datos.
+- Usuarios `active=false` no obtienen sesión.
 - No JWT de larga vida en `localStorage`. No tokens de Hacienda en el cliente.
 
 ---
@@ -129,4 +130,4 @@ Ver modelo `AuditLog` en `/docs/DATABASE.md`. Acciones críticas listadas en el 
 
 ## 11. Variables de entorno
 
-Plantilla en `/.env.example`. Completar el mapa en Fase 1 con validación Zod de env al boot (`src/server/env.ts`). Falta de `AUTH_SECRET` o URL de base = proceso no arranca.
+Plantilla en `/.env.example`. Validación Zod al boot en `src/server/env.ts`. Sin `BETTER_AUTH_SECRET` (≥32) o `DATABASE_URL` el proceso de app no arranca. Seed de producción bloqueado salvo `ALLOW_PRODUCTION_SEED=I_UNDERSTAND_THIS_IS_DESTRUCTIVE`.

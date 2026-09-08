@@ -1,7 +1,7 @@
 # Integración Ministerio de Hacienda — Comprobantes Electrónicos 4.4
 
 **Estado:** diseño. Ningún XML se genera en Fase 0.  
-**Versión objetivo:** 4.4, según copias oficiales en `/docs/hacienda/` capturadas el 2026-09-08.  
+**Versión objetivo:** 4.4, según copias oficiales en `/docs/hacienda/` capturadas el 2026-09-07 America/Costa_Rica (2026-09-08 UTC).  
 **Regla:** si este documento y un XSD/PDF oficial discrepan, prevalece el artefacto oficial versionado. No se rellenan huecos con memoria.
 
 Índice de fuentes: `/docs/hacienda/SOURCES.md`.

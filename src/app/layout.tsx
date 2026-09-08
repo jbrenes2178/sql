@@ -18,7 +18,11 @@ export const metadata: Metadata = {
   description: "Sistema de gestión para óptica en Costa Rica",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <html
       lang="es"

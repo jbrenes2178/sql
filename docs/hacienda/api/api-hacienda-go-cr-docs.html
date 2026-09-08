@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Documentación de la API del Ministerio de Hacienda.">
+  <title>Documentación de la API del Ministerio de Hacienda</title>
+  <link rel="icon" type="" href="/images/favicon.png">
+  <!-- CSS externo con el azul y la tipografía solicitados -->
+  <link rel="stylesheet" href="/css/mh.css" />
+
+  <style>
+    :root {
+      --mh-blue: rgb(24, 41, 81);
+    }
+
+    /* Body */
+    body {
+      font-family: 'Henderson Sans Basic', -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.65;
+      max-width: 960px;
+      margin: 24px auto;
+      font-size: 1.2em;
+      color: #111;
+      padding: 0 16px;
+    }
+
+    p {
+      font-size: 1.2em;
+    }
+
+    /* Títulos + enlaces con azul institucional */
+    h1,
+    h2,
+    h3 {
+      color: var(--mh-blue, rgb(24, 41, 81));
+    }
+
+    a {
+      color: var(--mh-blue, rgb(24, 41, 81));
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    hr {
+      border: 0;
+      border-top: 1px solid #e5e7eb;
+      margin: 1.5rem 0;
+    }
+
+    pre {
+      background: #0b1020;
+      color: #e5e7eb;
+      padding: 12px;
+      border-radius: 10px;
+      overflow: auto;
+    }
+
+    /* Monospace SOLO cuando uses <code> explícito (por defecto) */
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    /* Tablas base */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      overflow: hidden;
+      font-size: 0.85rem;
+      /* más pequeño que el body */
+      line-height: 1.4;
+    }
+
+    thead th {
+      background: #f8fafc;
+      white-space: nowrap;
+      /* No cortes por caracteres en los headers */
+      overflow-wrap: normal;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid #e5e7eb;
+      padding: 8px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    /* === Tabla 2: Casos de prueba === */
+    /* Monospace en todas menos "Caso" (como ya lo tenías) */
+    table[aria-label="Casos de prueba"] td:not([data-label="Caso"]) {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.95em;
+      line-height: 1.5;
+    }
+
+    table[aria-label="Casos de prueba"] td[data-label="Caso"] {
+      font-family: inherit;
+      font-size: inherit;
+    }
+
+    /* Mejor wrapping en celdas con texto largo (URLs/JSON/cURL) */
+    table[aria-label="Casos de prueba"] td {
+      white-space: normal;
+      overflow-wrap: break-word;
+      /* rompe en puntos “sensatos” */
+      word-break: break-word;
+    }
+
+    table[aria-label="Casos de prueba"] td code {
+      white-space: pre-wrap;
+      /* respeta espacios, permite saltos */
+      overflow-wrap: break-word;
+      word-break: break-word;
+      max-width: 100%;
+      display: inline;
+      /* evita bloques raros */
+    }
+
+    #footer {
+      margin-top: 3rem;
+      padding: 1rem;
+      border-top: 1px solid #e5e7eb;
+      font-size: 0.85rem;
+      text-align: center;
+      color: #555;
+    }
+
+    .run-link {
+      display: inline-block;
+      margin: 6px 0;
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: rgb(24,41,81);
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .api-result {
+      background: #0b1020;
+      color: #e5e7eb;
+      border-radius: 10px;
+      padding: 12px;
+      margin-top: 8px;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      display: none;
+      overflow-x: auto;
+    }
+
+    .api-result code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      white-space: pre-wrap;   /* wrap bonito */
+      word-break: break-word;
+    }
+
+    /* En móviles, permite cortes más agresivos SOLO para curl/JSON */
+    @media (max-width: 640px) {
+
+      table[aria-label="Casos de prueba"] td[data-label="curl"],
+      table[aria-label="Casos de prueba"] td[data-label="JSON esperado"] {
+        word-break: break-all;
+        /* si no hay espacios, corta por caracteres */
+      }
+    }
+  </style>
+</head>
+
+<body>
+    <h1 class="page-title">Documentación de la API del Ministerio de Hacienda</h1>
+  <h2>Introducción</h2>
+  <p>Aquí se describen los principales recursos y lineamientos para el uso de la <strong>API pública
+      del Ministerio de Hacienda de Costa Rica</strong>. Su objetivo es facilitar la integración de aplicaciones
+    desarrolladas por terceros, garantizando al mismo tiempo la <strong>disponibilidad, estabilidad y equidad en el
+      acceso</strong>.</p>
+  <p>A lo largo de este documento se detallan los diferentes <em>endpoints</em> disponibles, los parámetros requeridos y
+    los códigos de respuesta. También se incluyen ejemplos prácticos en <strong>cURL</strong>, lineamientos de
+    validación, políticas de uso y límites de consumo, así como recomendaciones de buenas prácticas para evitar bloqueos
+    y asegurar una integración eficiente.</p>
+  <p>La API pone a disposición información de contribuyentes, tipos de cambio, exoneraciones, registros agropecuarios y
+    pesqueros, además del Catálogo de Bienes y Servicios (CABYS). Cada sección incorpora casos de prueba y orientaciones
+    técnicas para ayudar a los desarrolladores a implementar soluciones robustas y responsables.</p>
+  <p>
+    En caso de consultas adicionales, reportes de incidencias o solicitudes de apoyo técnico relacionadas con el
+    uso de esta API, le invitamos a comunicarse directamente con el equipo de soporte a través del correo
+    electrónico:
+    <a href="mailto:facturati@hacienda.go.cr">facturati@hacienda.go.cr</a>.
+  </p>
+  <hr />
+  <h2>1. EndPoints</h2>
+  <h3><a href="https://api.hacienda.go.cr/fe/ae">https://api.hacienda.go.cr/fe/ae</a></h3>
+  <p>Permite obtener el nombre, el tipo de identificación, el régimen, la situación tributaria y las actividades
+    económicas asociadas a un contribuyente.</p>
+  <p><strong>Ejemplo cURL:</strong></p>
+  <pre><code class="bash">curl "https://api.hacienda.go.cr/fe/ae?identificacion=2100042005"</code></pre>
+  <a class="run-link" data-endpoint="https://api.hacienda.go.cr/fe/ae?identificacion=2100042005">EJECUTAR</a>
+  <pre class="api-result"><code></code></pre>
+  <hr />
+  <h3><a href="https://api.hacienda.go.cr/indicadores/tc/dolar">https://api.hacienda.go.cr/indicadores/tc/dolar</a></h3>
+  <p>Permite obtener el tipo de cambio del dólar (compra/venta). No requiere parámetros.</p>
+  <p><strong>Ejemplo cURL:</strong></p>
+  <pre><code class="language-bash">curl "https://api.hacienda.go.cr/indicadores/tc/dolar"</code></pre>
+  <a class="run-link" data-endpoint="https://api.hacienda.go.cr/indicadores/tc/dolar">EJECUTAR</a>
+  <pre class="api-result"><code></code></pre>
+  <hr />
+  <h3><a
+      href="https://api.hacienda.go.cr/indicadores/tc/dolar/historico">https://api.hacienda.go.cr/indicadores/tc/dolar/historico</a>
+  </h3>
+  <p>Permite obtener el histórico del tipo de cambio diario del dólar. Requiere parámetros <code>d</code> (desde) y
+    <code>h</code> (hasta).
+  </p>
+  <p><strong>Ejemplo cURL:</strong></p>
+  <pre><code class="bash">curl "https://api.hacienda.go.cr/indicadores/tc/dolar/historico?d=2019-12-01&amp;h=2019-12-09"
+</code></pre>
+  <hr />
+  <h3><a href="https://api.hacienda.go.cr/indicadores/tc/euro">https://api.hacienda.go.cr/indicadores/tc/euro</a></h3>
+  <p>Permite obtener el tipo de cambio del euro en dólares y colones. No requiere parámetros.</p>
+  <p><strong>Ejemplo cURL:</strong></p>
+  <pre><code class="bash">curl "https://api.hacienda.go.cr/indicadores/tc/euro"</code></pre>
+  <a class="run-link" data-endpoint="https://api.hacienda.go.cr/indicadores/tc/euro">EJECUTAR</a>
+  <pre class="api-result"><code></code></pre>
+  <hr />
+  <h3><a href="https://api.hacienda.go.cr/indicadores/tc">https://api.hacienda.go.cr/indicadores/tc</a></h3>
+  <p>Permite obtener tipo de cambio del dólar y euro en un solo recurso.</p>
+  <p><strong>Ejemplo cURL:</strong></p>
+  <pre><code class="language-bash">curl "https://api.hacienda.go.cr/indicadores/tc"
+</code></pre>
+  <a class="run-link" data-endpoint="https://api.hacienda.go.cr/indicadores/tc">EJECUTAR</a>
+  <pre class="api-result"><code></code></pre>
+  <hr />
+  <h3><a href="https://api.hacienda.go.cr/fe/ex">https://api.hacienda.go.cr/fe/ex</a></h3>
+  <p>Permite obtener información de exoneración. Requiere el parámetro <code>autorizacion</code> en formato
+    <code>AL-XXXXXXXX-XX</code>.
+  </p>
+  <p><strong>Ejemplo cURL:</strong></p>
+  <pre><code class="bash">curl "https://api.hacienda.go.cr/fe/ex?autorizacion=al-00460853-20"
+</code></pre>
+  <a class="run-link" data-endpoint="https://api.hacienda.go.cr/fe/ex?autorizacion=al-00460853-20">EJECUTAR</a>
+  <pre class="api-result"><code></code></pre>
+  <hr />
+  <h3><a href="https://api.hacienda.go.cr/fe/agropecuario">https://api.hacienda.go.cr/fe/agropecuario</a></h3>
+  <p>Permite obtener información de productores agropecuarios del MAG.</p>
+  <p><strong>Ejemplo cURL:</strong></p>
+  <pre><code class="bash">curl "https://api.hacienda.go.cr/fe/agropecuario?identificacion=2100042005"
+</code></pre>
+  <hr />
+  <h3><a href="https://api.hacienda.go.cr/fe/pesca">https://api.hacienda.go.cr/fe/pesca</a></h3>
+  <p>Permite obtener datos de productores agropecuarios, INCOPESCA y acuicultores vinculados a pesca.</p>
+  <p><strong>Ejemplo cURL:</strong></p>
+  <pre><code class="bash">curl "https://api.hacienda.go.cr/fe/pesca?identificacion=2100042005"
+</code></pre>
+  <hr />
+  <h3><a href="https://api.hacienda.go.cr/fe/cabys">https://api.hacienda.go.cr/fe/cabys</a></h3>
+  <p>Permite obtener información del <strong>Catálogo de Bienes y Servicios (CABYS)</strong>.</p>
+  <ul>
+    <li>Por descripción:</li>
+  </ul>
+  <pre><code class="bash">curl "https://api.hacienda.go.cr/fe/cabys?q=jugo%20de%20tomate&amp;top=2"
+</code></pre>
+  <a class="run-link" data-endpoint="https://api.hacienda.go.cr/fe/cabys?q=jugo de tomate&top=2">EJECUTAR</a>
+  <pre class="api-result"><code></code></pre>
+  <ul>
+    <li>Por código:</li>
+  </ul>
+  <pre><code class="bash">curl "https://api.hacienda.go.cr/fe/cabys?codigo=2132100000100"
+</code></pre>
+  <a class="run-link" data-endpoint="https://api.hacienda.go.cr/fe/cabys?codigo=2132100000100">EJECUTAR</a>
+  <pre class="api-result"><code></code></pre>
+
+  <hr />
+  <h2>2. Políticas de uso y límites</h2>
+  <p>Con el propósito de asegurar la continuidad del servicio y la igualdad de acceso, se aplican límites de consumo que permiten regular la cantidad de consultas realizadas por los usuarios.
+  </p>
+  <div class="card">
+    <!-- TABLA 1: usa fuente del body -->
+    <table aria-label="Límites de consumo">
+      <thead>
+        <tr>
+          <th>Tipo de límite</th>
+          <th>Umbral configurado</th>
+          <th>Equivalente en volumen</th>
+          <th>Consecuencia</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td data-label="Tipo de límite">Burst (ráfagas cortas)</td>
+          <td data-label="Umbral">20 solicitudes/seg en 5 seg</td>
+          <td data-label="Volumen">Máx. 100 en 5 seg</td>
+          <td data-label="Consecuencia">Bloqueo de IP por 10 min</td>
+        </tr>
+        <tr>
+          <td data-label="Tipo de límite">Promedio sostenido</td>
+          <td data-label="Umbral">10 solicitudes/seg en 120 seg</td>
+          <td data-label="Volumen">Máx. 1200 en 2 min</td>
+          <td data-label="Consecuencia">Bloqueo de IP por 10 min</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <hr />
+  <h2>3. Impacto de abusos y bloqueos</h2>
+  <p>Las consultas excesivas o mal diseñadas pueden generar bloqueos automáticos, afectando tanto al consumidor de la
+    API como a otros usuarios que comparten la misma red.</p>
+  <p><strong>Causas comunes de bloqueos:</strong></p>
+  <ul>
+    <li>Consultas repetitivas a un mismo registro.</li>
+    <li>Búsquedas constantes sobre identificaciones inexistentes.</li>
+    <li>Picos de tráfico generados por múltiples llamadas en ráfaga desde una sola acción.</li>
+  </ul>
+  <p><strong>Escenarios de riesgo:</strong></p>
+  <ul>
+    <li>En Costa Rica, muchos usuarios comparten la misma dirección IP por temas de red de los proveedores
+      (<strong>CGNAT</strong>). La suma de consultas puede activar los límites de protección aunque provengan de
+      diferentes usuarios.</li>
+    <li>En arquitecturas de nube, cientos de clientes pueden acceder desde un mismo servidor, concentrando el tráfico en
+      una sola IP.</li>
+  </ul>
+  <p><strong>Recomendaciones para mitigar bloqueos:</strong></p>
+  <ul>
+    <li>Usar <strong>caché local</strong> para evitar consultas innecesarias (ejemplo: el estado de un contribuyente no
+      cambia en tiempo real).</li>
+    <li>Espaciar las consultas y manejar los errores <strong>429</strong> con reintentos controlados.</li>
+    <li>Optimizar la lógica de la aplicación para que una acción no genere múltiples solicitudes simultáneas.</li>
+    <li>Coordinar con el ISP la posibilidad de usar <strong>IPv6</strong> o solicitar un rango dedicado en caso de
+      necesitar alto volumen sostenido.</li>
+  </ul>
+  <hr />
+  <h2>4. Validación de parámetros</h2>
+  <p>Cada endpoint exige parámetros específicos:</p>
+  <ul>
+    <li><code>/fe/ae</code> → <code>identificacion</code> (9–12 dígitos, numérico)</li>
+    <li><code>/fe/ex</code> → <code>autorizacion</code> (formato <code>AL-XXXXXXXX-XX</code>)</li>
+    <li><code>/fe/cabys</code> → <code>codigo</code> (13 dígitos) o <code>q</code> (mínimo 3 caracteres)</li>
+  </ul>
+  <p><strong>Códigos de error diferenciados:</strong></p>
+  <ul>
+    <li>400 → parámetro faltante o inválido</li>
+    <li>404 → recurso inexistente</li>
+    <li>429 → límites de consumo superados</li>
+  </ul>
+  <hr />
+  <h2>5. Casos de prueba</h2>
+  <p>En los siguientes ejemplos se utiliza la opción <code>-i</code> de <strong>cURL</strong>, la cual permite visualizar los encabezados HTTP junto con la respuesta. Esto facilita la verificación del código de estado devuelto por la API y asegura que las solicitudes estén siendo procesadas correctamente.</p>
+  <div class="card">
+    <!-- TABLA 2: "Casos de prueba" con monospace excepto la columna "Caso" y sin scroll -->
+    <table aria-label="Casos de prueba">
+      <colgroup>
+        <col style="width:14%"> <!-- Endpoint -->
+        <col style="width:14%"> <!-- Parámetro -->
+        <col style="width:12%"> <!-- Caso -->
+        <col style="width:30%"> <!-- curl -->
+        <col style="width:12%"> <!-- HTTP Status -->
+        <col style="width:18%"> <!-- JSON esperado -->
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Endpoint</th>
+          <th>Parámetro</th>
+          <th>Caso</th>
+          <th>curl</th>
+          <th>HTTP Status</th>
+          <th>JSON esperado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td data-label="Endpoint"><code>/fe/ae</code></td>
+          <td data-label="Parámetro"><code>identificacion</code></td>
+          <td data-label="Caso">OK</td>
+          <td data-label="curl"><code>curl -i "https://api.hacienda.go.cr/fe/ae?identificacion=2100042005"</code></td>
+          <td data-label="HTTP Status"><code>200 OK</code></td>
+          <td data-label="JSON"><code>{ "code":200, "status":"OK" }</code></td>
+        </tr>
+        <tr>
+          <td data-label="Endpoint"><code>/fe/ae</code></td>
+          <td data-label="Parámetro"><code>identificacion</code></td>
+          <td data-label="Caso">Falta parámetro</td>
+          <td data-label="curl"><code>curl -i "https://api.hacienda.go.cr/fe/ae"</code></td>
+          <td data-label="HTTP Status"><code>400 Bad Request</code></td>
+          <td data-label="JSON"><code>{ "code":400, "status":"Bad Request" }</code></td>
+        </tr>
+        <tr>
+          <td data-label="Endpoint"><code>/fe/ex</code></td>
+          <td data-label="Parámetro"><code>autorizacion</code></td>
+          <td data-label="Caso">OK</td>
+          <td data-label="curl"><code>curl -i "https://api.hacienda.go.cr/fe/ex?autorizacion=al-00460853-20"</code></td>
+          <td data-label="HTTP Status"><code>200 OK</code></td>
+          <td data-label="JSON"><code>{ "code":200, "status":"OK" }</code></td>
+        </tr>
+        <tr>
+          <td data-label="Endpoint"><code>/fe/ex</code></td>
+          <td data-label="Parámetro"><code>autorizacion</code></td>
+          <td data-label="Caso">Formato incorrecto</td>
+          <td data-label="curl"><code>curl -i "https://api.hacienda.go.cr/fe/ex?autorizacion=AL-0460853-20"</code></td>
+          <td data-label="HTTP Status"><code>400 Bad Request</code></td>
+          <td data-label="JSON"><code>{ "code":400, "status":"Bad Request" }</code></td>
+        </tr>
+        <tr>
+          <td data-label="Endpoint"><code>/fe/cabys</code></td>
+          <td data-label="Parámetro"><code>codigo</code></td>
+          <td data-label="Caso">OK</td>
+          <td data-label="curl"><code>curl -i "https://api.hacienda.go.cr/fe/cabys?codigo=2132100000100"</code></td>
+          <td data-label="HTTP Status"><code>200 OK</code></td>
+          <td data-label="JSON"><code>{ "code":200, "status":"OK" }</code></td>
+        </tr>
+        <tr>
+          <td data-label="Endpoint"><code>/fe/cabys</code></td>
+          <td data-label="Parámetro"><code>q</code></td>
+          <td data-label="Caso">OK</td>
+          <td data-label="curl"><code>curl -i "https://api.hacienda.go.cr/fe/cabys?q=jugo%20de%20tomate"</code></td>
+          <td data-label="HTTP Status"><code>200 OK</code></td>
+          <td data-label="JSON"><code>{ "code":200, "status":"OK" }</code></td>
+        </tr>
+        <tr>
+          <td data-label="Endpoint"><code>/fe/cabys</code></td>
+          <td data-label="Parámetro"><code>codigo/q</code></td>
+          <td data-label="Caso">Falta parámetro</td>
+          <td data-label="curl"><code>curl -i "https://api.hacienda.go.cr/fe/cabys"</code></td>
+          <td data-label="HTTP Status"><code>400 Bad Request</code></td>
+          <td data-label="JSON"><code>{ "code":400, "status":"Bad Request" }</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <hr />
+  <h2>6. Buenas prácticas de integración</h2>
+  <p>Con el fin de garantizar la disponibilidad, estabilidad y equidad en el acceso a
+    <strong>api.hacienda.go.cr</strong>, se han identificado patrones de consumo que exceden los límites razonables,
+    especialmente en las consultas al estado de situación tributaria.
+  </p>
+  <p>Si bien entendemos que algunos accesos provienen de entornos con IP compartidas (por <strong>CGNAT</strong> o
+    arquitecturas en la nube), el principal factor de sobrecarga no está en la conectividad, sino en la lógica de
+    integración implementada por cada desarrollador.</p>
+  <p>El monitoreo continuo realizado por el equipo técnico de la DTIC ha detectado consultas repetitivas en intervalos
+    muy cortos que no responden a cambios reales en el estado tributario. En seguimiento al monitoreo constante del
+    servicio, se recalcan las siguientes recomendaciones:</p>
+  <ul>
+    <li><strong>Implemente caché local</strong>: el estado tributario no cambia en tiempo real. Evite consultas
+      innecesarias.</li>
+    <li><strong>Espacie las consultas</strong>: distribuya las llamadas en el tiempo y maneje los errores
+      <strong>429</strong> con reintentos controlados.
+    </li>
+    <li><strong>Revise la lógica de su aplicación</strong>: evite que una sola acción genere múltiples llamadas en
+      ráfaga.</li>
+    <li><strong>Considere alternativas de conectividad</strong>: si su aplicación requiere alto volumen sostenido,
+      evalúe con su proveedor el uso de <strong>IPv6</strong> o rangos dedicados.</li>
+  </ul>
+  <hr />
+  <h2>7. Consideraciones de red</h2>
+  <p>Entendemos que en escenarios donde múltiples clientes comparten un mismo servidor o dirección IP (como ocurre en
+    entornos de nube o con CGNAT), la concurrencia de solicitudes puede ser elevada.</p>
+  <p>Se aclaran algunos puntos importantes:</p>
+  <ul>
+    <li>Los umbrales comunicados oficialmente y establecidos en este documento, son los que deben considerarse como
+      referencia al diseñar e integrar
+      aplicaciones con la API.</li>
+    <li>El sistema cuenta con mecanismos automáticos de protección que bloquean temporalmente IPs cuando se exceden los
+      límites, independientemente de si se trata de un solo usuario o de múltiples clientes detrás de la misma IP.</li>
+    <li>Para evitar bloqueos, recomendamos implementar las buenas prácticas publicadas: uso de <strong>caché</strong>
+      (para no repetir consultas a la misma identificación en intervalos cortos), distribución de las llamadas en el
+      tiempo, y manejo adecuado de errores <strong>429</strong> con reintentos controlados.</li>
+    <li>El estado de los contribuyentes no cambia en tiempo real, por lo que no es necesario realizar consultas
+      repetitivas continuas.</li>
+    <li>Si su aplicación atiende a múltiples clientes desde un mismo punto de salida, es fundamental regular el tráfico
+      internamente para no superar los umbrales de la API.</li>
+  </ul>
+  <p>Toda la información publicada en esta documentación se ofrece con el objetivo de facilitar la integración
+    tecnológica y garantizar el acceso equitativo a los servicios.
+    En caso de dudas, comentarios o incidencias técnicas, le invitamos a comunicarse directamente con nuestro equipo de
+    soporte
+    a través del correo electrónico:
+    <a href="mailto:facturati@hacienda.go.cr">facturati@hacienda.go.cr</a>.
+  </p>
+  <div id="footer">
+    <a href="https://www.hacienda.go.cr">
+      Ministerio de Hacienda, República de Costa Rica ©
+      <script>document.write(new Date().getFullYear());</script>
+    </a>
+
+  </div>
+</body>
+
+</html>
+<script>
+  document.querySelectorAll("h2").forEach(h => {
+    if (!h.id) {
+      h.id = h.textContent.trim().toLowerCase()
+        .replace(/\s+/g, "-")
+        .replace(/[^\w\-]+/g, "");
+    }
+    const a = document.createElement("a");
+    a.href = "#" + h.id;
+    a.textContent = " #";
+    a.className = "anchor-link";
+    h.appendChild(a);
+  });
+
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".run-link").forEach(link => {
+      link.addEventListener("click", async (e) => {
+        e.preventDefault();
+        const url = link.getAttribute("data-endpoint");
+        const resultPre = link.nextElementSibling;
+        const resultCode = resultPre.querySelector("code");
+
+        resultPre.style.display = "block";
+        resultCode.textContent = "⏳ Ejecutando...";
+
+        try {
+          const r = await fetch(url);
+          const data = await r.json();
+          resultCode.textContent = JSON.stringify(data, null, 2);
+        } catch (err) {
+          resultCode.textContent = "⚠️ Error: " + err.message;
+        }
+      });
+    });
+  });
+
+  // document.addEventListener("DOMContentLoaded", () => {
+  //   document.querySelectorAll("pre > code").forEach(code => {
+  //     const pre = code.parentElement;
+  //     pre.classList.add("code-wrapper");
+  //     const btn = document.createElement("button");
+  //     btn.className = "copy-btn";
+  //     btn.textContent = "Copiar";
+  //     btn.addEventListener("click", async () => {
+  //       try {
+  //         await navigator.clipboard.writeText(code.innerText);
+  //         const old = btn.textContent; btn.textContent="¡Copiado!";
+  //         setTimeout(()=>btn.textContent=old, 1600);
+  //       } catch {
+  //         btn.textContent="Error";
+  //       }
+  //     });
+  //     pre.appendChild(btn);
+  //   });
+  // });
+</script>

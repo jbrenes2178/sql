@@ -1,0 +1,688 @@
+﻿<!DOCTYPE HTML><html><head><title>Comprobantes Electrónicos API</title><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="generator" content="https://github.com/kevinrenskers/raml2html 2.4.0"><link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/styles/default.min.css"><script type="text/javascript" src="https://atv.hacienda.go.cr/public/4b027100db4ebe803c3f680fe29590edcd6f60ba9b75" async ></script><script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script><script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/highlight.min.js"></script><script type="text/javascript">
+      $(document).ready(function() {
+        $('.page-header pre code, .top-resource-description pre code').each(function(i, block) {
+          hljs.highlightBlock(block);
+        });
+
+        $('[data-toggle]').click(function() {
+          var selector = $(this).data('target') + ' pre code';
+          $(selector).each(function(i, block) {
+            hljs.highlightBlock(block);
+          });
+        });
+
+        // open modal on hashes like #_action_get
+        $(window).bind('hashchange', function(e) {
+          var anchor_id = document.location.hash.substr(1); //strip #
+          var element = $('#' + anchor_id);
+
+          // do we have such element + is it a modal?  --> show it
+          if (element.length && element.hasClass('modal')) {
+            element.modal('show');
+          }
+        });
+
+        // execute hashchange on first page load
+        $(window).trigger('hashchange');
+
+        // remove url fragment on modal hide
+        $('.modal').on('hidden.bs.modal', function() {
+          try {
+            if (history && history.replaceState) {
+                history.replaceState({}, '', '#');
+            }
+          } catch(e) {}
+        });
+      });
+    </script><style>
+      .hljs {
+        background: transparent;
+      }
+      .parent {
+        color: #999;
+      }
+      .list-group-item > .badge {
+        float: none;
+        margin-right: 6px;
+      }
+      .panel-title > .methods {
+        float: right;
+      }
+      .badge {
+        border-radius: 0;
+        text-transform: uppercase;
+        width: 70px;
+        font-weight: normal;
+        color: #f3f3f6;
+        line-height: normal;
+      }
+      .badge_get {
+        background-color: #63a8e2;
+      }
+      .badge_post {
+        background-color: #6cbd7d;
+      }
+      .badge_put {
+        background-color: #22bac4;
+      }
+      .badge_delete {
+        background-color: #d26460;
+      }
+      .badge_patch {
+        background-color: #ccc444;
+      }
+      .list-group, .panel-group {
+        margin-bottom: 0;
+      }
+      .panel-group .panel+.panel-white {
+        margin-top: 0;
+      }
+      .panel-group .panel-white {
+        border-bottom: 1px solid #F5F5F5;
+        border-radius: 0;
+      }
+      .panel-white:last-child {
+        border-bottom-color: white;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+      }
+      .panel-white .panel-heading {
+        background: white;
+      }
+      .tab-pane ul {
+        padding-left: 2em;
+      }
+      .tab-pane h2 {
+        font-size: 1.2em;
+        padding-bottom: 4px;
+        border-bottom: 1px solid #ddd;
+      }
+      .tab-pane h3 {
+        font-size: 1.1em;
+      }
+      .tab-content {
+        border-left: 1px solid #ddd;
+        border-right: 1px solid #ddd;
+        border-bottom: 1px solid #ddd;
+        padding: 10px;
+      }
+      #sidebar {
+        margin-top: 30px;
+        padding-right: 5px;
+        overflow: auto;
+        height: 90%;
+      }
+      .top-resource-description {
+        border-bottom: 1px solid #ddd;
+        background: #fcfcfc;
+        padding: 15px 15px 0 15px;
+        margin: -15px -15px 10px -15px;
+      }
+      .resource-description {
+        border-bottom: 1px solid #fcfcfc;
+        background: #fcfcfc;
+        padding: 15px 15px 0 15px;
+        margin: -15px -15px 10px -15px;
+      }
+      .resource-description p:last-child {
+        margin: 0;
+      }
+      .list-group .badge {
+        float: left;
+      }
+      .method_description {
+        margin-left: 85px;
+      }
+      .method_description p:last-child {
+        margin: 0;
+      }
+      .list-group-item {
+        cursor: pointer;
+      }
+      .list-group-item:hover {
+        background-color: #f5f5f5;
+      }
+    </style>
+                                <script>!function(e){var n="https://s.go-mpulse.net/boomerang/";if("True"=="True")e.BOOMR_config=e.BOOMR_config||{},e.BOOMR_config.PageParams=e.BOOMR_config.PageParams||{},e.BOOMR_config.PageParams.pci=!0,n="https://s2.go-mpulse.net/boomerang/";if(window.BOOMR_API_key="KDVV3-TJFAT-92L9Z-Y3Q7D-U6SGU",function(){function e(){if(!i){var e=document.createElement("script");e.id="boomr-scr-as",e.src=window.BOOMR.url,e.async=!0,o.parentNode.appendChild(e),i=!0}}function t(e){i=!0;var n,t,a,r,d=document,O=window;if(window.BOOMR.snippetMethod=e?"if":"i",t=function(e,n){var t=d.createElement("script");t.id=n||"boomr-if-as",t.src=window.BOOMR.url,BOOMR_lstart=(new Date).getTime(),e=e||d.body,e.appendChild(t)},!window.addEventListener&&window.attachEvent&&navigator.userAgent.match(/MSIE [67]\./))return window.BOOMR.snippetMethod="s",void t(o.parentNode,"boomr-async");a=document.createElement("IFRAME"),a.src="about:blank",a.title="",a.role="presentation",a.loading="eager",r=(a.frameElement||a).style,r.width=0,r.height=0,r.border=0,r.display="none",o.parentNode.appendChild(a);try{O=a.contentWindow,d=O.document.open()}catch(_){n=document.domain,a.src="javascript:var d=document.open();d.domain='"+n+"';void(0);",O=a.contentWindow,d=O.document.open()}if(n)d._boomrl=function(){this.domain=n,t()},d.write("<bo"+"dy onload='document._boomrl();'>");else if(O._boomrl=function(){t()},O.addEventListener)O.addEventListener("load",O._boomrl,!1);else if(O.attachEvent)O.attachEvent("onload",O._boomrl);d.close()}function a(e){window.BOOMR_onload=e&&e.timeStamp||(new Date).getTime()}if(!window.BOOMR||!window.BOOMR.version&&!window.BOOMR.snippetExecuted){window.BOOMR=window.BOOMR||{},window.BOOMR.snippetStart=(new Date).getTime(),window.BOOMR.snippetExecuted=!0,window.BOOMR.snippetVersion=12,window.BOOMR.url=n+"KDVV3-TJFAT-92L9Z-Y3Q7D-U6SGU";var o=document.currentScript||document.getElementsByTagName("script")[0],i=!1,r=document.createElement("link");if(r.relList&&"function"==typeof r.relList.supports&&r.relList.supports("preload")&&"as"in r)window.BOOMR.snippetMethod="p",r.href=window.BOOMR.url,r.rel="preload",r.as="script",r.addEventListener("load",e),r.addEventListener("error",function(){t(!0)}),setTimeout(function(){if(!i)t(!0)},3e3),BOOMR_lstart=(new Date).getTime(),o.parentNode.appendChild(r);else t(!1);if(window.addEventListener)window.addEventListener("load",a,!1);else if(window.attachEvent)window.attachEvent("onload",a)}}(),"".length>0)if(e&&"performance"in e&&e.performance&&"function"==typeof e.performance.setResourceTimingBufferSize)e.performance.setResourceTimingBufferSize();!function(){if(BOOMR=e.BOOMR||{},BOOMR.plugins=BOOMR.plugins||{},!BOOMR.plugins.AK){var n=""=="true"?1:0,t="",a="g3eqfjixf3slc2u7qp6a-f-832bcd49e-clientnsv4-s.akamaihd.net",o="false"=="true"?2:1,i={"ak.v":"41","ak.cp":"1381666","ak.ai":parseInt("835826",10),"ak.ol":"0","ak.cr":6,"ak.ipv":4,"ak.proto":"h2","ak.rid":"f60aae7","ak.r":49439,"ak.a2":n,"ak.m":"dsca","ak.n":"essl","ak.cport":16293,"ak.gh":"23.32.14.196","ak.quicv":"","ak.tlsv":"tls1.3","ak.0rtt":"","ak.0rtt.ed":"","ak.csrc":"-","ak.acc":"","ak.t":"1788838908","ak.ak":"hOBiQwZUYzCg5VSAfCLimQ==3N9hQuvW0npNw3WyvbIPADfb6o2SBQyOibtKzbMkc0qQDphk4kLyqwvc53dUr/M+RlR5H5g6cVdn6KOy7kSXZkQNSKfN8DQqCO3ddimKVcPIj7yiAAJUuTyEdQCrUnksNaOqT60wGSacQf4SrZYIFSPeu9mYLsfj6LfuV1ZkPiZNV3MdUTxzQy8jmBc6ykBVm6zxUqvHN9GlYlog4c1pAAQ0n7TIs1aV6hneQJYlfVGJKkwGXKgv5npFaF4OeQgqoBWxnoY/WoLf/GjmiI0Fsuhl8lLFCKG2Z5PYna0x32YLBj2FJrI51nwzGzyijV2fZZCeYvmCUWJxDJr/zFqDulyZbMg7iEV9P69agwcb+VooVMTYK/ndqG8PkQZqs32KaLLr3LbocMtcLhQmzgxI8Dht+bqx7LXXJ355f2Ve+mQ=","ak.pv":"22","ak.dpoabenc":"","ak.tf":o};if(""!==t)i["ak.ruds"]=t;var r={i:!1,av:function(n){var t="http.initiator";if(n&&(!n[t]||"spa_hard"===n[t]))i["ak.feo"]=void 0!==e.aFeoApplied?1:0,BOOMR.addVar(i)},rv:function(){var e=["ak.cport","ak.cr","ak.csrc","ak.gh","ak.ipv","ak.m","ak.n","ak.ol","ak.proto","ak.quicv","ak.tlsv","ak.0rtt","ak.0rtt.ed","ak.r","ak.acc","ak.t","ak.tf"];BOOMR.removeVar(e)}};BOOMR.plugins.AK={akVars:i,akDNSPreFetchDomain:a,init:function(){if(!r.i){var e=BOOMR.subscribe;e("before_beacon",r.av,null,null),e("onbeacon",r.rv,null,null),r.i=!0}return this},is_complete:function(){return!0}}}}()}(window);</script></head><body data-spy="scroll" data-target="#sidebar"><div class="container"><div class="row"><div class="col-md-9" role="main"><div class="page-header"><h1>Comprobantes Electrónicos API <small>version v1</small></h1><p>https://api.comprobanteselectronicos.go.cr/recepcion/v1/</p></div><div class="panel panel-default"><div class="panel-heading"><h3 id="recepcion" class="panel-title">/recepcion</h3></div><div class="panel-body"><div class="top-resource-description"><p>Recepción de comprobantes electrónicos y respuestas del receptor.</p></div><div class="panel-group"><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_recepcion"><span class="parent"></span>/recepcion</a> <span class="methods"><a href="#recepcion_post"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_recepcion" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#recepcion_post'" class="list-group-item"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Recibe el comprobante electrónico o respuesta del receptor.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="recepcion_post"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/recepcion</h4></div><div class="modal-body"><div class="alert alert-info"><p>Recibe el comprobante electrónico o respuesta del receptor.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by oidc<p>Open ID Connect (OIDC) que funciona sobre el estándar de OAuth 2.0. (<a href="http://openid.net/connect/">http://openid.net/connect/</a>)</p></div><ul class="nav nav-tabs"><li class="active"><a href="#recepcion_post_request" data-toggle="tab">Request</a></li><li><a href="#recepcion_post_response" data-toggle="tab">Response</a></li><li><a href="#recepcion_post_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="recepcion_post_request"><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Schema</strong>:</p><pre><code>{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "clave": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "fecha": {
+      "description": "Fecha de la factura en formato [yyyy-MM-dd&#39;T&#39;HH:mm:ssZ] como se define en [http://tools.ietf.org/html/rfc3339#section-5.6] (date-time).",
+      "type": "string"
+    },
+    "emisor": {
+      "type": "object",
+      "properties": {
+        "tipoIdentificacion": {
+          "type": "string",
+          "maxLength": 2
+        },
+        "numeroIdentificacion": {
+          "type": "string",
+          "maxLength": 12
+        }
+      },
+      "required": [
+        "tipoIdentificacion",
+        "numeroIdentificacion"
+      ]
+    },
+    "receptor": {
+      "type": "object",
+      "properties": {
+        "tipoIdentificacion": {
+          "type": "string",
+          "maxLength": 2
+        },
+        "numeroIdentificacion": {
+          "type": "string",
+          "maxLength": 12
+        }
+      },
+      "required": [
+        "tipoIdentificacion",
+        "numeroIdentificacion"
+      ]
+    },
+    "callbackUrl":{
+      "description": "URL utilizado para que Hacienda envíe la respuesta de aceptación o rechazo, se va a enviar un mensaje JSON, igual al que se define en recepcionGetItem, por medio de un canal HTTP/HTTPS utilizando POST.",
+      "type": "string"
+    },
+    "consecutivoReceptor":{
+      "description": "Numeración consecutiva de los mensajes de confirmación. Este atributo es obligatorio en caso de ser un mensaje de confirmación del receptor.",
+      "type": "string"
+    },
+    "comprobanteXml": {
+      "description": "Comprobante electrónico XML firmado por el obligado tributario utilizando XAdES-EPES. El texto del XML debe convertirse a un byte array y codificarse en Base64. El mapa de caracteres a utilizar en el XML y en la codificación Base64 es UTF8.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "clave",
+    "fecha",
+    "emisor",
+    "comprobanteXml"
+  ]
+}
+</code></pre><p><strong>Example</strong>:</p><pre><code>{
+  "clave": "50601011600310112345600100010100000000011999999999",
+  "fecha": "2016-01-01T00:00:00-0600",
+  "emisor": {
+    "tipoIdentificacion": "02",
+    "numeroIdentificacion": "3101123456"
+  },
+  "receptor": {
+    "tipoIdentificacion": "02",
+    "numeroIdentificacion": "3101123456"
+  },
+  "comprobanteXml": "PD94bWwgdmVyc2lvbj0iMS4wIiA/Pg0KDQo8ZG9tYWluIHhtbG5zPSJ1cm46amJvc3M6ZG9tYWluOjQuMCI+DQogICAgPGV4dGVuc2lvbnM+DQogICAgICAgIDxleHRlbnNpb24gbW9kdWxlPSJvcmcuamJvc3MuYXMuY2x1c3RlcmluZy5pbmZpbmlzcGFuIi8+DQogICAgICAgIDxleHRlbnNpb24gbW9kdWxlPSJvcmcuamJvc3MuYXMuY2x1c3RlcmluZy5qZ3JvdXBzIi8+DQogICAgICAgIDxleHRlbnNpb24gbW9kdWxlPSJvcmcuamJvc3MuYXMuY29ubmVjdG9yIi8+DQogICAgICAgIDxleHRlbnNpb24gbW..."
+}
+</code></pre></div><div class="tab-pane" id="recepcion_post_response"><h2>HTTP status code <a href="http://httpstatus.es/201" target="_blank">201</a></h2><p>Se recibió correctamente el comprobante electrónico o respuesta del receptor, queda pendiente la validación del mismo y el envío de la respuesta de parte de Hacienda.</p><h3>Headers</h3><ul><li><strong>Location</strong>: <em>(string)</em><p>URL donde puede consultar el estado del comprobante recibido.</p><p><strong>Example</strong>:</p><pre>https://api.comprobanteselectronicos.go.cr/recepcion/v1/recepcion/50601011600310112345600100010100000000011999999999/</pre></li><li><strong>X-Ratelimit-Limit</strong>: <em>(integer)</em><p>Número de requests permitidos en el período de tiempo actual.</p></li><li><strong>X-Ratelimit-Remaining</strong>: <em>(integer)</em><p>Número de requests restantes en el período de tiempo actual.</p></li><li><strong>X-Ratelimit-Reset</strong>: <em>(integer)</em><p>Tiempo restante antes de que los límites se reinicien (UTC Epoch Seconds).</p></li></ul><h2>HTTP status code <a href="http://httpstatus.es/400" target="_blank">400</a></h2><p>Ocurrió algún error de validación.</p><h3>Headers</h3><ul><li><strong>X-Error-Cause</strong>: <em>(string)</em><p>Muestra la causa del error.</p><p><strong>Example</strong>:</p><pre>El comprobante con la Clave [50601011600310112345600100010100000000011999999999] ya fue recibido.</pre></li><li><strong>validation-exception</strong>: <em>(boolean)</em><p>Indica si es un error con el <code>body</code> enviado del entity.</p><p><strong>Example</strong>:</p><pre><code>true</code></pre></li><li><strong>X-Ratelimit-Limit</strong>: <em>(integer)</em><p>Número de requests permitidos en el período de tiempo actual.</p></li><li><strong>X-Ratelimit-Remaining</strong>: <em>(integer)</em><p>Número de requests restantes en el período de tiempo actual.</p></li><li><strong>X-Ratelimit-Reset</strong>: <em>(integer)</em><p>Tiempo restante antes de que los límites se reinicien (UTC Epoch Seconds).</p></li></ul></div><div class="tab-pane" id="recepcion_post_securedby">Secured by oidc<h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>(string)</em><p>Se utiliza para enviar el OIDC Token (OAuth 2.0 Token)</p><p><strong>Example</strong>:</p><pre>bearer eyJhbJciOiJSUzI1NiJ9.eyJqdGkiOiI4YzYxZDc2MC01YTU3LTQyMWYtOTk4ZS05ZDM1NTFmZWNjZDYiLCJleHAiOjE0NjExMDQyOTgsIm5iZiI6MCwiaWF0IjoxNDYxMTAzOTk4LCJpc3MiOiJodHRwOi8vMTkyLjE2OC45OS4xMDA6OTA5MC9hdXRoL3JlYWxtcy9zaWdudW0tb25lIiwiYXVkIjoic2lnbnVtLW9uZS1kZW1vLWFwcCIsInN1YiI6IjJiYzgxZjcxLWI4ZTQtNDE4My1iZTQwLWIzODEzNTYxYmQzOSIsInR5cCI6IkJlYXJlciIsImF6cCI6InNpZ251bS1vbmUtZGVtby1hcHAiLCJzZXNzaW9uX3N0YXRlIjoiNzUwYzYwMDEtNDhjZC00NzJmLWE3Y2YtNjNkZTY1MDhkYzEyIiwiY2xpZW50X3Nlc3Npb24iOiJlNTE2ZjI0ZC01ZGQzLTQxNmdFtgTQwMC02MmJhM2JlYjhmMjUiLCJhbGxvd2VkLW9yaWdpbnMiOltdLCJyZXNvdXJjZV9hY2Nlc3MiOnsic2lnbnVtLW9uZS1hcGkiOnsicm9sZXMiOlsiYXBwIl19fSwiY2xpZW50SG9zdCI6IjE5Mi4xNjguOTkuMSIsImNsaWVudElkIjoic2lnbnVtLW9uZS1kZW1vLWFwcCIsIm5hbWUiOiIiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJzZXJ2aWNlLWFjY291bnQtc2lnbnVtLW9uZS1kZW1vLWFwcCIsImNsaWVudEFkZHJlc3MiOiIxOTIuMTY4Ljk5LjEiLCJlbWFpbCI6InNlcnZpY2UtYWNjb3VudC1zaWdudW0tb25lLWRlbW8tYXBwQHBsYWNlaG9sZGVyLm9yZyJ9.Jp7xXWaIkyUrWWSldNWmg5FhqqmIKt4jagKYPRiRMceXQo7eh_y765f5Y3CSeVX1KSJaNQjouHSMTTMgMjxbceDIkGM4_scTpqBgNJNEtFx7HydpujjtO36grWwvUA4Xv92frsafq2ZiHl5IW0ChZ-VmwvqBS5n80JetAJp5KGN1xW10Zh0JhRUUZtzN_Rjuw0hPfYvPbYEc2rEVEjujdjMa1hKkNp4F_JhXwd7aVBOTiG8udSukhWPQxI1lReUm47y4vfUDq0I3udPbsK869mbf-MvuY955gVfLv6oevByUzF1UyTlH1Dvv1KBnrpKaMjvWQ-xmAhNTwVx_OOo-CPXw</pre></li></ul><h2>HTTP status code <a href="http://httpstatus.es/401" target="_blank">401</a></h2><p>Unauthorized</p></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_recepcion__clave_"><span class="parent">/recepcion</span>/{clave}</a> <span class="methods"><a href="#recepcion__clave__get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_recepcion__clave_" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#recepcion__clave__get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Obtiene el estado del comprobante indicado por la <code>clave</code>.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="recepcion__clave__get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/recepcion</span>/{clave}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Obtiene el estado del comprobante indicado por la <code>clave</code>.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by oidc<p>Open ID Connect (OIDC) que funciona sobre el estándar de OAuth 2.0. (<a href="http://openid.net/connect/">http://openid.net/connect/</a>)</p></div><ul class="nav nav-tabs"><li class="active"><a href="#recepcion__clave__get_request" data-toggle="tab">Request</a></li><li><a href="#recepcion__clave__get_response" data-toggle="tab">Response</a></li><li><a href="#recepcion__clave__get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="recepcion__clave__get_request"><h3>URI Parameters</h3><ul><li><strong>clave</strong>: <em>required (string - maxLength: 50)</em><p>Es el campo <code>Clave</code> comprobante electrónico. Es un campo de 50 posiciones.</p><p><strong>Example</strong>:</p><pre>50601011600310112345600100010100000000011999999999</pre></li></ul></div><div class="tab-pane" id="recepcion__clave__get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Respuesta correcta.</p><h3>Headers</h3><ul><li><strong>X-Ratelimit-Limit</strong>: <em>(integer)</em><p>Número de requests permitidos en el período de tiempo actual.</p></li><li><strong>X-Ratelimit-Remaining</strong>: <em>(integer)</em><p>Número de requests restantes en el período de tiempo actual.</p></li><li><strong>X-Ratelimit-Reset</strong>: <em>(integer)</em><p>Tiempo restante antes de que los límites se reinicien (UTC Epoch Seconds).</p></li></ul><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Schema</strong>:</p><pre><code>{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "clave": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "fecha": {
+      "description": "Fecha de la factura en formato [yyyy-MM-dd&#39;T&#39;HH:mm:ssZ] como se define en [http://tools.ietf.org/html/rfc3339#section-5.6] (date-time).",
+      "type": "string"
+    },
+    "ind-estado": {
+      "type": "string",
+      "enum": ["recibido", "procesando", "aceptado", "rechazado", "error"]
+    },
+    "respuesta-xml": {
+      "description": "Respuesta de aceptación o rechazo en XML firmada por el Ministerio de Hacienda utilizando XAdES-XL. El texto del XML debe convertirse a un byte array y codificarse en Base64. El mapa de caracteres a utilizar en el XML y en la codificación Base64 es UTF8.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "clave",
+    "fecha",
+    "ind-estado"
+  ]
+}
+</code></pre><p><strong>Example</strong>:</p><pre><code>{
+  "clave": "50601011600310112345600100010100000000011999999999",
+  "fecha": "2016-01-01T00:00:00-0600",
+  "ind-estado": "aceptado",
+  "respuesta-xml": "PD94bWwgdmVyc2lvbj0iMS4wIiA/Pg0KDQo8ZG9tYWluIHhtbG5zPSJ1cm46amJvc3M6ZG9tYWluOjQuMCI+DQogICAgPGV4dGVuc2lvbnM+DQogICAgICAgIDxleHRlbnNpb24gbW9kdWxlPSJvcmcuamJvc3MuYXMuY2x1c3RlcmluZy5pbmZpbmlzcGFuIi8+DQogICAgICAgIDxleHRlbnNpb24gbW9kdWxlPSJvcmcuamJvc3MuYXMuY2x1c3RlcmluZy5qZ3JvdXBzIi8+DQogICAgICAgIDxleHRlbnNpb24gbW9kdWxlPSJvcmcuamJvc3MuYXMuY29ubmVjdG9yIi8+DQogICAgICAgIDxleHRlbnNpb24gbW..."
+}
+</code></pre><h2>HTTP status code <a href="http://httpstatus.es/400" target="_blank">400</a></h2><p>Ocurrió un error, no se encuentra el recurso.</p><h3>Headers</h3><ul><li><strong>X-Error-Cause</strong>: <em>(string)</em><p>Muestra la causa del error.</p><p><strong>Example</strong>:</p><pre>No existe el recurso con Clave = [50601011600310112345600100010100000000011999999999]
+</pre></li><li><strong>X-Ratelimit-Limit</strong>: <em>(integer)</em><p>Número de requests permitidos en el período de tiempo actual.</p></li><li><strong>X-Ratelimit-Remaining</strong>: <em>(integer)</em><p>Número de requests restantes en el período de tiempo actual.</p></li><li><strong>X-Ratelimit-Reset</strong>: <em>(integer)</em><p>Tiempo restante antes de que los límites se reinicien (UTC Epoch Seconds).</p></li></ul></div><div class="tab-pane" id="recepcion__clave__get_securedby">Secured by oidc<h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>(string)</em><p>Se utiliza para enviar el OIDC Token (OAuth 2.0 Token)</p><p><strong>Example</strong>:</p><pre>bearer eyJhbJciOiJSUzI1NiJ9.eyJqdGkiOiI4YzYxZDc2MC01YTU3LTQyMWYtOTk4ZS05ZDM1NTFmZWNjZDYiLCJleHAiOjE0NjExMDQyOTgsIm5iZiI6MCwiaWF0IjoxNDYxMTAzOTk4LCJpc3MiOiJodHRwOi8vMTkyLjE2OC45OS4xMDA6OTA5MC9hdXRoL3JlYWxtcy9zaWdudW0tb25lIiwiYXVkIjoic2lnbnVtLW9uZS1kZW1vLWFwcCIsInN1YiI6IjJiYzgxZjcxLWI4ZTQtNDE4My1iZTQwLWIzODEzNTYxYmQzOSIsInR5cCI6IkJlYXJlciIsImF6cCI6InNpZ251bS1vbmUtZGVtby1hcHAiLCJzZXNzaW9uX3N0YXRlIjoiNzUwYzYwMDEtNDhjZC00NzJmLWE3Y2YtNjNkZTY1MDhkYzEyIiwiY2xpZW50X3Nlc3Npb24iOiJlNTE2ZjI0ZC01ZGQzLTQxNmdFtgTQwMC02MmJhM2JlYjhmMjUiLCJhbGxvd2VkLW9yaWdpbnMiOltdLCJyZXNvdXJjZV9hY2Nlc3MiOnsic2lnbnVtLW9uZS1hcGkiOnsicm9sZXMiOlsiYXBwIl19fSwiY2xpZW50SG9zdCI6IjE5Mi4xNjguOTkuMSIsImNsaWVudElkIjoic2lnbnVtLW9uZS1kZW1vLWFwcCIsIm5hbWUiOiIiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJzZXJ2aWNlLWFjY291bnQtc2lnbnVtLW9uZS1kZW1vLWFwcCIsImNsaWVudEFkZHJlc3MiOiIxOTIuMTY4Ljk5LjEiLCJlbWFpbCI6InNlcnZpY2UtYWNjb3VudC1zaWdudW0tb25lLWRlbW8tYXBwQHBsYWNlaG9sZGVyLm9yZyJ9.Jp7xXWaIkyUrWWSldNWmg5FhqqmIKt4jagKYPRiRMceXQo7eh_y765f5Y3CSeVX1KSJaNQjouHSMTTMgMjxbceDIkGM4_scTpqBgNJNEtFx7HydpujjtO36grWwvUA4Xv92frsafq2ZiHl5IW0ChZ-VmwvqBS5n80JetAJp5KGN1xW10Zh0JhRUUZtzN_Rjuw0hPfYvPbYEc2rEVEjujdjMa1hKkNp4F_JhXwd7aVBOTiG8udSukhWPQxI1lReUm47y4vfUDq0I3udPbsK869mbf-MvuY955gVfLv6oevByUzF1UyTlH1Dvv1KBnrpKaMjvWQ-xmAhNTwVx_OOo-CPXw</pre></li></ul><h2>HTTP status code <a href="http://httpstatus.es/401" target="_blank">401</a></h2><p>Unauthorized</p></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="comprobantes" class="panel-title">/comprobantes</h3></div><div class="panel-body"><div class="top-resource-description"><p>Comprobantes electrónicos que ha enviado el obligado tributario.</p></div><div class="panel-group"><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_comprobantes"><span class="parent"></span>/comprobantes</a> <span class="methods"><a href="#comprobantes_get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_comprobantes" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#comprobantes_get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Obtiene un resumen de todos los comprobantes electrónicos que ha enviado el obligado tributario ordenado de forma descendente por la fecha.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="comprobantes_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/comprobantes</h4></div><div class="modal-body"><div class="alert alert-info"><p>Obtiene un resumen de todos los comprobantes electrónicos que ha enviado el obligado tributario ordenado de forma descendente por la fecha.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by oidc<p>Open ID Connect (OIDC) que funciona sobre el estándar de OAuth 2.0. (<a href="http://openid.net/connect/">http://openid.net/connect/</a>)</p></div><ul class="nav nav-tabs"><li class="active"><a href="#comprobantes_get_request" data-toggle="tab">Request</a></li><li><a href="#comprobantes_get_response" data-toggle="tab">Response</a></li><li><a href="#comprobantes_get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="comprobantes_get_request"><h3>Query Parameters</h3><ul><li><strong>offset</strong>: <em>(integer)</em><p>A partir de que posición contar los items a retornar</p><p><strong>Example</strong>:</p><pre><code>10</code></pre></li><li><strong>limit</strong>: <em>(integer - default: 50)</em><p>Cantidad de items a retornar apartir del offset</p><p><strong>Example</strong>:</p><pre><code>15</code></pre></li><li><strong>emisor</strong>: <em>(string - maxLength: 14)</em><p>Tipo y número de identificación del emisor.</p><p><strong>Example</strong>:</p><pre>02003101123456</pre></li><li><strong>receptor</strong>: <em>(string - maxLength: 14)</em><p>Tipo y número de identificación del receptor.</p><p><strong>Example</strong>:</p><pre>02003101123456</pre></li></ul></div><div class="tab-pane" id="comprobantes_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Respuesta correcta completa.</p><h3>Headers</h3><ul><li><strong>Accept-Range</strong>: <em>(string)</em><p>Muestra la cantidad máxima de items que se le puede solicitar al recurso.</p><p><strong>Example</strong>:</p><pre>resource 50</pre></li><li><strong>X-Ratelimit-Limit</strong>: <em>(integer)</em><p>Número de requests permitidos en el período de tiempo actual.</p></li><li><strong>X-Ratelimit-Remaining</strong>: <em>(integer)</em><p>Número de requests restantes en el período de tiempo actual.</p></li><li><strong>X-Ratelimit-Reset</strong>: <em>(integer)</em><p>Tiempo restante antes de que los límites se reinicien (UTC Epoch Seconds).</p></li></ul><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Schema</strong>:</p><pre><code>{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "clave": {
+        "type": "string",
+        "maxLength": 50
+      },
+      "fecha": {
+        "description": "Fecha de la factura en formato [yyyy-MM-dd&#39;T&#39;HH:mm:ssZ] como se define en [http://tools.ietf.org/html/rfc3339#section-5.6] (date-time).",
+        "type": "string"
+      },
+      "emisor": {
+        "type": "object",
+        "properties": {
+          "tipoIdentificacion": {
+            "type": "string",
+            "maxLength": 2
+          },
+          "numeroIdentificacion": {
+            "type": "string",
+            "maxLength": 12
+          },
+          "nombre": {
+            "type": "string",
+            "maxLength": 80
+          }
+        },
+        "required": [
+          "tipoIdentificacion",
+          "numeroIdentificacion",
+          "nombre"
+        ]
+      },
+      "receptor": {
+        "type": "object",
+        "properties": {
+          "tipoIdentificacion": {
+            "type": "string",
+            "maxLength": 2
+          },
+          "numeroIdentificacion": {
+            "type": "string",
+            "maxLength": 12
+          },
+          "nombre": {
+            "type": "string",
+            "maxLength": 80
+          }
+        },
+        "required": [
+          "tipoIdentificacion",
+          "numeroIdentificacion",
+          "nombre"
+        ]
+      },
+      "notasCredito": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "clave": {
+              "type": "string",
+              "maxLength": 50
+            },
+            "fecha": {
+              "description": "Fecha de la factura en formato [yyyy-MM-dd&#39;T&#39;HH:mm:ssZ] como se define en [http://tools.ietf.org/html/rfc3339#section-5.6] (date-time).",
+              "type": "string"
+            }
+          },
+          "required": [
+            "clave",
+            "fecha"
+          ]
+        }
+      },
+      "notasDebito": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "clave": {
+              "type": "string",
+              "maxLength": 50
+            },
+            "fecha": {
+              "description": "Fecha de la factura en formato [yyyy-MM-dd&#39;T&#39;HH:mm:ssZ] como se define en [http://tools.ietf.org/html/rfc3339#section-5.6] (date-time).",
+              "type": "string"
+            }
+          },
+          "required": [
+            "clave",
+            "fecha"
+          ]
+        }
+      }
+    },
+    "required": [
+      "clave",
+      "fecha",
+      "emisor",
+      "receptor"
+    ]
+  }
+}
+</code></pre><p><strong>Example</strong>:</p><pre><code>[{
+  "clave": "50601011600310112345600100010100000000011999999999",
+  "fecha": "2016-01-01T00:00:00-0600",
+  "emisor": {
+    "tipoIdentificacion": "02",
+    "numeroIdentificacion": "3101123456",
+    "nombre": "Razón Social S.A."
+  },
+  "receptor": {
+    "tipoIdentificacion": "02",
+    "numeroIdentificacion": "3101123456",
+    "nombre": "Razón Social S.A."
+  },
+  "notasCredito": [{
+    "clave": "50601011600310112345600100010300000000011999999999",
+    "fecha": "2016-01-01T00:00:00-0600"
+  }],
+  "notasDebito": [{
+    "clave": "50601011600310112345600100010200000000011999999999",
+    "fecha": "2016-01-01T00:00:00-0600"
+  }]
+},
+{
+  "clave": "50601011600310112345600100010100000000021999999999",
+  "fecha": "2016-01-01T00:00:00-0600",
+  "emisor": {
+    "tipoIdentificacion": "02",
+    "numeroIdentificacion": "3101123456",
+    "nombre": "Razón Social S.A."
+  },
+  "receptor": {
+    "tipoIdentificacion": "02",
+    "numeroIdentificacion": "3101123456",
+    "nombre": "Razón Social S.A."
+  },
+  "notasCredito": [{
+    "clave": "50601011600310112345600100010300000000021999999999",
+    "fecha": "2016-01-01T00:00:00-0600"
+  }],
+  "notasDebito": [{
+    "clave": "50601011600310112345600100010200000000021999999999",
+    "fecha": "2016-01-01T00:00:00-0600"
+  }]
+}]
+</code></pre><h2>HTTP status code <a href="http://httpstatus.es/206" target="_blank">206</a></h2><p>Respuesta correcta parcial debido al uso de <code>offset</code> y/o <code>limit</code>.</p><h3>Headers</h3><ul><li><strong>Accept-Range</strong>: <em>(string)</em><p>Muestra la cantidad máxima de items que se le puede solicitar al recurso.</p><p><strong>Example</strong>:</p><pre>resource 50</pre></li><li><strong>Content-Range</strong>: <em>(string)</em><p>Muestra la información del <code>offset</code>-<code>limit</code>/<code>count_all</code>.</p><p><strong>Example</strong>:</p><pre>0-10/100</pre></li><li><strong>X-Ratelimit-Limit</strong>: <em>(integer)</em><p>Número de requests permitidos en el período de tiempo actual.</p></li><li><strong>X-Ratelimit-Remaining</strong>: <em>(integer)</em><p>Número de requests restantes en el período de tiempo actual.</p></li><li><strong>X-Ratelimit-Reset</strong>: <em>(integer)</em><p>Tiempo restante antes de que los límites se reinicien (UTC Epoch Seconds).</p></li></ul><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Schema</strong>:</p><pre><code>{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "clave": {
+        "type": "string",
+        "maxLength": 50
+      },
+      "fecha": {
+        "description": "Fecha de la factura en formato [yyyy-MM-dd&#39;T&#39;HH:mm:ssZ] como se define en [http://tools.ietf.org/html/rfc3339#section-5.6] (date-time).",
+        "type": "string"
+      },
+      "emisor": {
+        "type": "object",
+        "properties": {
+          "tipoIdentificacion": {
+            "type": "string",
+            "maxLength": 2
+          },
+          "numeroIdentificacion": {
+            "type": "string",
+            "maxLength": 12
+          },
+          "nombre": {
+            "type": "string",
+            "maxLength": 80
+          }
+        },
+        "required": [
+          "tipoIdentificacion",
+          "numeroIdentificacion",
+          "nombre"
+        ]
+      },
+      "receptor": {
+        "type": "object",
+        "properties": {
+          "tipoIdentificacion": {
+            "type": "string",
+            "maxLength": 2
+          },
+          "numeroIdentificacion": {
+            "type": "string",
+            "maxLength": 12
+          },
+          "nombre": {
+            "type": "string",
+            "maxLength": 80
+          }
+        },
+        "required": [
+          "tipoIdentificacion",
+          "numeroIdentificacion",
+          "nombre"
+        ]
+      },
+      "notasCredito": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "clave": {
+              "type": "string",
+              "maxLength": 50
+            },
+            "fecha": {
+              "description": "Fecha de la factura en formato [yyyy-MM-dd&#39;T&#39;HH:mm:ssZ] como se define en [http://tools.ietf.org/html/rfc3339#section-5.6] (date-time).",
+              "type": "string"
+            }
+          },
+          "required": [
+            "clave",
+            "fecha"
+          ]
+        }
+      },
+      "notasDebito": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "clave": {
+              "type": "string",
+              "maxLength": 50
+            },
+            "fecha": {
+              "description": "Fecha de la factura en formato [yyyy-MM-dd&#39;T&#39;HH:mm:ssZ] como se define en [http://tools.ietf.org/html/rfc3339#section-5.6] (date-time).",
+              "type": "string"
+            }
+          },
+          "required": [
+            "clave",
+            "fecha"
+          ]
+        }
+      }
+    },
+    "required": [
+      "clave",
+      "fecha",
+      "emisor",
+      "receptor"
+    ]
+  }
+}
+</code></pre><p><strong>Example</strong>:</p><pre><code>[{
+  "clave": "50601011600310112345600100010100000000011999999999",
+  "fecha": "2016-01-01T00:00:00-0600",
+  "emisor": {
+    "tipoIdentificacion": "02",
+    "numeroIdentificacion": "3101123456",
+    "nombre": "Razón Social S.A."
+  },
+  "receptor": {
+    "tipoIdentificacion": "02",
+    "numeroIdentificacion": "3101123456",
+    "nombre": "Razón Social S.A."
+  },
+  "notasCredito": [{
+    "clave": "50601011600310112345600100010300000000011999999999",
+    "fecha": "2016-01-01T00:00:00-0600"
+  }],
+  "notasDebito": [{
+    "clave": "50601011600310112345600100010200000000011999999999",
+    "fecha": "2016-01-01T00:00:00-0600"
+  }]
+},
+{
+  "clave": "50601011600310112345600100010100000000021999999999",
+  "fecha": "2016-01-01T00:00:00-0600",
+  "emisor": {
+    "tipoIdentificacion": "02",
+    "numeroIdentificacion": "3101123456",
+    "nombre": "Razón Social S.A."
+  },
+  "receptor": {
+    "tipoIdentificacion": "02",
+    "numeroIdentificacion": "3101123456",
+    "nombre": "Razón Social S.A."
+  },
+  "notasCredito": [{
+    "clave": "50601011600310112345600100010300000000021999999999",
+    "fecha": "2016-01-01T00:00:00-0600"
+  }],
+  "notasDebito": [{
+    "clave": "50601011600310112345600100010200000000021999999999",
+    "fecha": "2016-01-01T00:00:00-0600"
+  }]
+}]
+</code></pre></div><div class="tab-pane" id="comprobantes_get_securedby">Secured by oidc<h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>(string)</em><p>Se utiliza para enviar el OIDC Token (OAuth 2.0 Token)</p><p><strong>Example</strong>:</p><pre>bearer eyJhbJciOiJSUzI1NiJ9.eyJqdGkiOiI4YzYxZDc2MC01YTU3LTQyMWYtOTk4ZS05ZDM1NTFmZWNjZDYiLCJleHAiOjE0NjExMDQyOTgsIm5iZiI6MCwiaWF0IjoxNDYxMTAzOTk4LCJpc3MiOiJodHRwOi8vMTkyLjE2OC45OS4xMDA6OTA5MC9hdXRoL3JlYWxtcy9zaWdudW0tb25lIiwiYXVkIjoic2lnbnVtLW9uZS1kZW1vLWFwcCIsInN1YiI6IjJiYzgxZjcxLWI4ZTQtNDE4My1iZTQwLWIzODEzNTYxYmQzOSIsInR5cCI6IkJlYXJlciIsImF6cCI6InNpZ251bS1vbmUtZGVtby1hcHAiLCJzZXNzaW9uX3N0YXRlIjoiNzUwYzYwMDEtNDhjZC00NzJmLWE3Y2YtNjNkZTY1MDhkYzEyIiwiY2xpZW50X3Nlc3Npb24iOiJlNTE2ZjI0ZC01ZGQzLTQxNmdFtgTQwMC02MmJhM2JlYjhmMjUiLCJhbGxvd2VkLW9yaWdpbnMiOltdLCJyZXNvdXJjZV9hY2Nlc3MiOnsic2lnbnVtLW9uZS1hcGkiOnsicm9sZXMiOlsiYXBwIl19fSwiY2xpZW50SG9zdCI6IjE5Mi4xNjguOTkuMSIsImNsaWVudElkIjoic2lnbnVtLW9uZS1kZW1vLWFwcCIsIm5hbWUiOiIiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJzZXJ2aWNlLWFjY291bnQtc2lnbnVtLW9uZS1kZW1vLWFwcCIsImNsaWVudEFkZHJlc3MiOiIxOTIuMTY4Ljk5LjEiLCJlbWFpbCI6InNlcnZpY2UtYWNjb3VudC1zaWdudW0tb25lLWRlbW8tYXBwQHBsYWNlaG9sZGVyLm9yZyJ9.Jp7xXWaIkyUrWWSldNWmg5FhqqmIKt4jagKYPRiRMceXQo7eh_y765f5Y3CSeVX1KSJaNQjouHSMTTMgMjxbceDIkGM4_scTpqBgNJNEtFx7HydpujjtO36grWwvUA4Xv92frsafq2ZiHl5IW0ChZ-VmwvqBS5n80JetAJp5KGN1xW10Zh0JhRUUZtzN_Rjuw0hPfYvPbYEc2rEVEjujdjMa1hKkNp4F_JhXwd7aVBOTiG8udSukhWPQxI1lReUm47y4vfUDq0I3udPbsK869mbf-MvuY955gVfLv6oevByUzF1UyTlH1Dvv1KBnrpKaMjvWQ-xmAhNTwVx_OOo-CPXw</pre></li></ul><h2>HTTP status code <a href="http://httpstatus.es/401" target="_blank">401</a></h2><p>Unauthorized</p></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_comprobantes__clave_"><span class="parent">/comprobantes</span>/{clave}</a> <span class="methods"><a href="#comprobantes__clave__get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_comprobantes__clave_" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#comprobantes__clave__get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Obtiene el comprobante indicado por la <code>clave</code>.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="comprobantes__clave__get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/comprobantes</span>/{clave}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Obtiene el comprobante indicado por la <code>clave</code>.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by oidc<p>Open ID Connect (OIDC) que funciona sobre el estándar de OAuth 2.0. (<a href="http://openid.net/connect/">http://openid.net/connect/</a>)</p></div><ul class="nav nav-tabs"><li class="active"><a href="#comprobantes__clave__get_request" data-toggle="tab">Request</a></li><li><a href="#comprobantes__clave__get_response" data-toggle="tab">Response</a></li><li><a href="#comprobantes__clave__get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="comprobantes__clave__get_request"><h3>URI Parameters</h3><ul><li><strong>clave</strong>: <em>required (string - maxLength: 50)</em><p>Es el campo <code>Clave</code> de la factura o tiquete electrónicos. Es un campo de 54 posiciones.</p><p><strong>Example</strong>:</p><pre>50601011600310112345600100010100000000011999999999</pre></li></ul></div><div class="tab-pane" id="comprobantes__clave__get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Respuesta correcta.</p><h3>Headers</h3><ul><li><strong>X-Ratelimit-Limit</strong>: <em>(integer)</em><p>Número de requests permitidos en el período de tiempo actual.</p></li><li><strong>X-Ratelimit-Remaining</strong>: <em>(integer)</em><p>Número de requests restantes en el período de tiempo actual.</p></li><li><strong>X-Ratelimit-Reset</strong>: <em>(integer)</em><p>Tiempo restante antes de que los límites se reinicien (UTC Epoch Seconds).</p></li></ul><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Schema</strong>:</p><pre><code>{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "clave": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "fecha": {
+      "description": "Fecha de la factura en formato [yyyy-MM-dd&#39;T&#39;HH:mm:ssZ] como se define en [http://tools.ietf.org/html/rfc3339#section-5.6] (date-time).",
+      "type": "string"
+    },
+    "emisor": {
+      "type": "object",
+      "properties": {
+        "tipoIdentificacion": {
+          "type": "string",
+          "maxLength": 2
+        },
+        "numeroIdentificacion": {
+          "type": "string",
+          "maxLength": 12
+        },
+        "nombre": {
+          "type": "string",
+          "maxLength": 80
+        }
+      },
+      "required": [
+        "tipoIdentificacion",
+        "numeroIdentificacion",
+        "nombre"
+      ]
+    },
+    "receptor": {
+      "type": "object",
+      "properties": {
+        "tipoIdentificacion": {
+          "type": "string",
+          "maxLength": 2
+        },
+        "numeroIdentificacion": {
+          "type": "string",
+          "maxLength": 12
+        },
+        "nombre": {
+          "type": "string",
+          "maxLength": 80
+        }
+      },
+      "required": [
+        "tipoIdentificacion",
+        "numeroIdentificacion",
+        "nombre"
+      ]
+    },
+    "notasCredito": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "clave": {
+            "type": "string",
+            "maxLength": 50
+          },
+          "fecha": {
+            "description": "Fecha de la factura en formato [yyyy-MM-dd&#39;T&#39;HH:mm:ssZ] como se define en [http://tools.ietf.org/html/rfc3339#section-5.6] (date-time).",
+            "type": "string"
+          }
+        },
+        "required": [
+          "clave",
+          "fecha"
+        ]
+      }
+    },
+    "notasDebito": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "clave": {
+            "type": "string",
+            "maxLength": 50
+          },
+          "fecha": {
+            "description": "Fecha de la factura en formato [yyyy-MM-dd&#39;T&#39;HH:mm:ssZ] como se define en [http://tools.ietf.org/html/rfc3339#section-5.6] (date-time).",
+            "type": "string"
+          }
+        },
+        "required": [
+          "clave",
+          "fecha"
+        ]
+      }
+    }
+  },
+  "required": [
+    "clave",
+    "fecha",
+    "emisor",
+    "receptor"
+  ]
+}
+</code></pre><p><strong>Example</strong>:</p><pre><code>{
+  "clave": "50601011600310112345600100010100000000011999999999",
+  "fecha": "2016-01-01T00:00:00-0600",
+  "emisor": {
+    "tipoIdentificacion": "02",
+    "numeroIdentificacion": "3101123456",
+    "nombre": "Razón Social S.A."
+  },
+  "receptor": {
+    "tipoIdentificacion": "02",
+    "numeroIdentificacion": "3101123456",
+    "nombre": "Razón Social S.A."
+  },
+  "notasCredito": [{
+    "clave": "50601011600310112345600100010300000000011999999999",
+    "fecha": "2016-01-01T00:00:00-0600"
+  }],
+  "notasDebito": [{
+    "clave": "50601011600310112345600100010200000000011999999999",
+    "fecha": "2016-01-01T00:00:00-0600"
+  }]
+}
+</code></pre><h2>HTTP status code <a href="http://httpstatus.es/400" target="_blank">400</a></h2><p>Ocurrió un error, no se encuentra el recurso.</p><h3>Headers</h3><ul><li><strong>X-Error-Cause</strong>: <em>(string)</em><p>Muestra la causa del error.</p><p><strong>Example</strong>:</p><pre>No existe el recurso con Clave = [50601011600310112345600100010100000000011999999999]
+</pre></li><li><strong>X-Ratelimit-Limit</strong>: <em>(integer)</em><p>Número de requests permitidos en el período de tiempo actual.</p></li><li><strong>X-Ratelimit-Remaining</strong>: <em>(integer)</em><p>Número de requests restantes en el período de tiempo actual.</p></li><li><strong>X-Ratelimit-Reset</strong>: <em>(integer)</em><p>Tiempo restante antes de que los límites se reinicien (UTC Epoch Seconds).</p></li></ul></div><div class="tab-pane" id="comprobantes__clave__get_securedby">Secured by oidc<h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>(string)</em><p>Se utiliza para enviar el OIDC Token (OAuth 2.0 Token)</p><p><strong>Example</strong>:</p><pre>bearer eyJhbJciOiJSUzI1NiJ9.eyJqdGkiOiI4YzYxZDc2MC01YTU3LTQyMWYtOTk4ZS05ZDM1NTFmZWNjZDYiLCJleHAiOjE0NjExMDQyOTgsIm5iZiI6MCwiaWF0IjoxNDYxMTAzOTk4LCJpc3MiOiJodHRwOi8vMTkyLjE2OC45OS4xMDA6OTA5MC9hdXRoL3JlYWxtcy9zaWdudW0tb25lIiwiYXVkIjoic2lnbnVtLW9uZS1kZW1vLWFwcCIsInN1YiI6IjJiYzgxZjcxLWI4ZTQtNDE4My1iZTQwLWIzODEzNTYxYmQzOSIsInR5cCI6IkJlYXJlciIsImF6cCI6InNpZ251bS1vbmUtZGVtby1hcHAiLCJzZXNzaW9uX3N0YXRlIjoiNzUwYzYwMDEtNDhjZC00NzJmLWE3Y2YtNjNkZTY1MDhkYzEyIiwiY2xpZW50X3Nlc3Npb24iOiJlNTE2ZjI0ZC01ZGQzLTQxNmdFtgTQwMC02MmJhM2JlYjhmMjUiLCJhbGxvd2VkLW9yaWdpbnMiOltdLCJyZXNvdXJjZV9hY2Nlc3MiOnsic2lnbnVtLW9uZS1hcGkiOnsicm9sZXMiOlsiYXBwIl19fSwiY2xpZW50SG9zdCI6IjE5Mi4xNjguOTkuMSIsImNsaWVudElkIjoic2lnbnVtLW9uZS1kZW1vLWFwcCIsIm5hbWUiOiIiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJzZXJ2aWNlLWFjY291bnQtc2lnbnVtLW9uZS1kZW1vLWFwcCIsImNsaWVudEFkZHJlc3MiOiIxOTIuMTY4Ljk5LjEiLCJlbWFpbCI6InNlcnZpY2UtYWNjb3VudC1zaWdudW0tb25lLWRlbW8tYXBwQHBsYWNlaG9sZGVyLm9yZyJ9.Jp7xXWaIkyUrWWSldNWmg5FhqqmIKt4jagKYPRiRMceXQo7eh_y765f5Y3CSeVX1KSJaNQjouHSMTTMgMjxbceDIkGM4_scTpqBgNJNEtFx7HydpujjtO36grWwvUA4Xv92frsafq2ZiHl5IW0ChZ-VmwvqBS5n80JetAJp5KGN1xW10Zh0JhRUUZtzN_Rjuw0hPfYvPbYEc2rEVEjujdjMa1hKkNp4F_JhXwd7aVBOTiG8udSukhWPQxI1lReUm47y4vfUDq0I3udPbsK869mbf-MvuY955gVfLv6oevByUzF1UyTlH1Dvv1KBnrpKaMjvWQ-xmAhNTwVx_OOo-CPXw</pre></li></ul><h2>HTTP status code <a href="http://httpstatus.es/401" target="_blank">401</a></h2><p>Unauthorized</p></div></div></div></div></div></div></div></div></div></div></div><div class="col-md-3"><div id="sidebar" class="hidden-print affix" role="complementary"><ul class="nav nav-pills nav-stacked"><li><a href="#recepcion">/recepcion</a></li><li><a href="#comprobantes">/comprobantes</a></li></ul></div></div></div></div><script type="text/javascript"  src="/20j7BfIiPEdqj/LJ5VEf/NttLeIX4/EhiDkhXOh9ticchi/EGtHdV0efQs/PE4eE/lEXFyYB"></script></body></html>
